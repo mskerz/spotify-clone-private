@@ -41,12 +41,11 @@ const authSlice = createSlice({
       )
       //login
       .addCase(SignIn.pending, (state) => {
-        state.loading = true;
+        state.loading = false;
         state.status = "loading";
       })
       .addCase(SignIn.fulfilled, (state, action: PayloadAction<User>) => {
-        state.loading = false;
-        state.status = "succeeded";
+         state.status = "succeeded";
         state.isLoggedIn = true;
         state.user = action.payload;
       })

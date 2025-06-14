@@ -7,9 +7,7 @@ import { SongClient } from "@/components/data/song";
 import { Metadata } from "next";
 import { FaPlus } from "react-icons/fa";
  
-export const metadata : Metadata = {
-  title: "PlaySong",
-}
+ 
 
 export default async function Home() {
   const songs = await getSongs();

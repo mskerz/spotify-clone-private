@@ -8,10 +8,12 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { Divider } from "@/components/common";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { form, setField, isFormEmpty, resetLoginForm } = useLoginForm();
   const { dispatch, useSelector } = useRedux();
+  const navigate = useRouter();
 
   const handleGoogleLogin = () => {
     dispatch(authActions.SignInWithGoogle());
@@ -30,16 +32,15 @@ export default function LoginPage() {
       return;
     }
     const { email, password } = form;
-    toast
+     toast
       .promise(dispatch(authActions.SignIn({ email, password })).unwrap(), {
-        loading: "Logging in...",
-        success: "Login successful!",
-        error: (err) => err || "Login failed. Please try again.",
+      loading: "Logging in...",
+      success: "Login successful!",
+      error: (err) => err || "Login failed. Please try again.",
       })
       .then(() => {
-        // success
-
-        resetLoginForm();
+      resetLoginForm();
+      navigate.push("/");
       })
       .catch(() => {});
   };

@@ -5,71 +5,60 @@ import { auth, app } from "@/libs/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useRegisterForm } from "@/hook/forms";
+import { useRedux } from "@/hook/redux";
+import { authActions } from "@/providers/redux/slice/action";
 
 function RegisterPage() {
   const { form, setField, resetRegisterForm, isFormEmpty } = useRegisterForm();
+  const { dispatch, useSelector } = useRedux();
   const navigate = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      if (isFormEmpty) {
-        toast("Please fill in all required fields.", {
-          icon: "⚠️",
-          style: {
-            borderRadius: "15px",
-            background: "#212121",
-            color: "#fff",
-          },
-        });
-        return;
-      }
 
-      const {
-        email,
-        password,
-        firstName,
-        lastName,
-        age,
-        phoneNumber,
-        birthday,
-      } = form;
-      const createNewUser = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    if (isFormEmpty) {
+      toast("Please fill in all required fields.", {
+        icon: "⚠️",
+        style: {
+          borderRadius: "15px",
+          background: "#212121",
+          color: "#fff",
         },
-        body: JSON.stringify({
-          firebase_uid: createNewUser.user.uid,
-          email: createNewUser.user.email,
-          firstName: firstName,
-          lastName: lastName,
-          age: age,
-          phoneNumber: phoneNumber,
-          birthday: birthday,
-        }),
       });
-
-      if (response.ok) {
-        toast.success("User registered successfully.");
-        resetRegisterForm();
-        navigate.replace("/login");
-      }
-    } catch (error) {
-      toast.error("Error registering user.");
-      console.error("❌ Error registering user:", error);
+      return;
     }
+
+    toast
+      .promise(
+        dispatch(
+          authActions.SignUp({
+            email: form.email,
+            password: form.password,
+            firstName: form.firstName,
+            lastName: form.lastName,
+            age: form.age,
+            phoneNumber: form.phoneNumber,
+            birthday: form.birthday,
+          }),
+        ).unwrap(),
+        {
+          loading: " Registering...",
+          success: " Register successful !",
+          error: (err) => err || "Login failed. Please try again.",
+        },
+      )
+      .then(() => {
+        // success
+
+        resetRegisterForm();
+        navigate.push("/login");
+      })
+      .catch(() => {});
   };
 
   return (
     <div className="flex items-center justify-center">
       <div className="flex w-full items-center justify-center">
-        <div className="flex my-3  h-auto max-w-xl flex-col items-center rounded-xl bg-black p-10 shadow-lg">
+        <div className="my-3 flex h-auto max-w-xl flex-col items-center rounded-xl bg-black p-10 shadow-lg">
           <div className="flex flex-col items-center">
             <h2 className="mb-2 text-xl font-semibold text-gray-200">
               Sign up to your account

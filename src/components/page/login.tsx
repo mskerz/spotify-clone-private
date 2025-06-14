@@ -7,12 +7,15 @@ import { GoogleOriginal as Google } from "devicons-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { Divider } from "@/components/common";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const { form, setField, isFormEmpty, resetLoginForm } = useLoginForm();
   const { dispatch, useSelector } = useRedux();
-  const { user } = useSelector((state) => state.auth); // ✅ ได้ type rootState ทันที
 
+  const handleGoogleLogin = () => {
+    dispatch(authActions.SignInWithGoogle());
+  };
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isFormEmpty) {
@@ -28,15 +31,11 @@ export default function LoginPage() {
     }
     const { email, password } = form;
     toast
-      .promise(
-        dispatch(authActions.SignIn({ email, password })).unwrap(),
-        {
-          loading: "Logging in...",
-          success: "Login successful!",
-          error: (err) => err || "Login failed. Please try again.",
-        },
-        
-      )
+      .promise(dispatch(authActions.SignIn({ email, password })).unwrap(), {
+        loading: "Logging in...",
+        success: "Login successful!",
+        error: (err) => err || "Login failed. Please try again.",
+      })
       .then(() => {
         // success
 
@@ -51,17 +50,22 @@ export default function LoginPage() {
           <h2 className="mt-4 text-xl font-semibold text-white">
             Sign in to your account
           </h2>
-          <button className="mt-6 flex items-center justify-center gap-2 rounded-md bg-[#1ed760] px-4 py-2 text-white shadow transition hover:bg-[#1fdf64]">
+          <Button
+            onClick={handleGoogleLogin}
+            className="mt-6 flex cursor-pointer items-center justify-center gap-2 bg-[#1ed760] text-white hover:bg-[#1fdf64]"
+            type="button"
+          >
             <Google size={24} color="white" />
             Login with Google
-          </button>
+          </Button>
         </div>
-    
+
         <Divider />
 
         <form
           onSubmit={handleLogin}
           className="flex w-full flex-col items-center"
+          aria-label="Login form"
         >
           <div className="mb-4 w-full">
             <label className="mb-1 block text-white">Email address</label>
@@ -83,12 +87,12 @@ export default function LoginPage() {
               placeholder="Enter your password"
             />
           </div>
-          <button
+          <Button
             type="submit"
-            className="mt-2 w-full rounded-4xl bg-[#1ed760] px-4 py-2 text-white shadow transition hover:bg-[#1fdf64]"
+            className="mt-2 w-full cursor-pointer rounded-4xl bg-[#1ed760] px-4 py-2 text-white shadow transition hover:bg-[#1fdf64]"
           >
             Login
-          </button>
+          </Button>
         </form>
         <div className="mt-4 text-sm text-gray-400">
           {" Don't have an account? "}
@@ -99,17 +103,6 @@ export default function LoginPage() {
             Sign Up
           </Link>
         </div>
-
-        { user && (
-          <div className="mt-4 text-sm text-gray-400">
-            {" Logged in as: "}
-            <span className="font-medium text-[#1ed760] hover:underline">
-              {user.email}
-            </span>
-          </div>
-        )
-
-        }
       </div>
     </div>
   );

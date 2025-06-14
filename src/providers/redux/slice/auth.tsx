@@ -80,13 +80,36 @@ const authSlice = createSlice({
           state.status = "failed";
           state.error = action.payload ?? "Login failed";
         },
-      )
+      ).addCase(signOutUser.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+      })
       .addCase(signOutUser.fulfilled, (state) => {
         state.loading = false;
         state.status = "succeeded";
         state.isLoggedIn = false;
         state.user = null;
-      });
+      }).addCase(signOutUser.rejected, (state, action: PayloadAction<string | undefined>) => {
+        state.loading = false;
+        state.status = "failed";
+        state.error = action.payload ?? "Login failed";
+      })
+      .addCase(SignInWithGoogle.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+      })
+      .addCase(SignInWithGoogle.fulfilled, (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.isLoggedIn = true;
+        state.user = action.payload;
+      }).addCase(SignInWithGoogle.rejected, (state, action: PayloadAction<string | undefined>) => {
+        state.loading = false;
+        state.status = "failed";
+        state.error = action.payload ?? "Login failed";
+      })
+      
+      ;
   },
 });
 

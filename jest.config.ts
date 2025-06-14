@@ -10,6 +10,7 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
+  modulePaths: ["<rootDir>/src"],
   clearMocks: true, // ล้าง mock ทุกครั้งก่อนเทสใหม่
   collectCoverage: true, // รวบรวม coverage
   coverageDirectory: "coverage", // โฟลเดอร์เก็บรายงาน coverage
@@ -20,10 +21,10 @@ const config: Config = {
     "!**/.next/**",
   ],
   moduleNameMapper: {
-    // ตรงกับ alias ใน tsconfig.json (ถ้ามี)
-    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  
 };
 // npm test
 // export config ผ่าน next/jest

@@ -4,6 +4,7 @@ import { filterCategorySongs, getAll } from "@/providers/redux/slice/song";
 import Category from "@/types/category";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Button } from "../ui/button";
  
 function CategoriesListButton({ categories }: { categories: Category[] }) {
     const [activeId, setActiveId] = useState<number | null>(null);
@@ -18,7 +19,7 @@ function CategoriesListButton({ categories }: { categories: Category[] }) {
     }
     return (
         <div className="m-4 flex justify-center">
-            <button
+            <Button
                 className={`${
                     activeId === null
                             ? "bg-gray-800"
@@ -30,9 +31,9 @@ function CategoriesListButton({ categories }: { categories: Category[] }) {
                 }}
             >
                 All
-            </button>
+            </Button>
             {categories.map((category) => (
-                <button
+                <Button
                     key={category.id}
                     className={`${
                         activeId === category.id
@@ -45,7 +46,7 @@ function CategoriesListButton({ categories }: { categories: Category[] }) {
                     }}
                 >
                     {category.name}
-                </button>
+                </Button>
             ))}
         </div>
     );

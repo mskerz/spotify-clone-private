@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AuthProvider {
+  GOOGLE
+  LOCAL
+  
+}
+
+model User {
+  id          String       @id @default(cuid())
+  firebaseUid String       @unique
+  email       String       @unique
+  role        Role         @default(USER)
+  provider    AuthProvider @default(LOCAL)
+  createdAt   DateTime     @default(now())
+  updatedAt DateTime  @updatedAt
+  userInfo  UserInfo?
+}
+
+model UserInfo {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  firstName    String?
+  lastName     String?
+  avatarUrl    String?
+  age          Int
+  phoneNumnber String?
+  birthday     DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Song {
+  id          Int        @id @default(autoincrement())
+  title       String
+  artist      String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  coverImage  String
+  releaseDate DateTime
+  playlists   Playlist[] @relation("PlaylistSongs")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  songs Song[]
+}
+
+model Playlist {
+  id    Int    @id @default(autoincrement())
+  name  String
+  songs Song[] @relation("PlaylistSongs")
+}
+
+// 

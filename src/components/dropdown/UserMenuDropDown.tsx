@@ -13,43 +13,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
-import { useRedux } from "@/hook/redux";
+import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
+import Link from "next/link";
+import useAuth from "@/hooks/auth";
 
-type UserProps = {
-  user: User;
-};
+function UserMenuDropDown() {
+  const { auth, handleSignOut } = useAuth();
+  const { user } = auth ?? {};
 
-function UserMenuDropDown({ user }: UserProps) {
-
-    const {dispatch} = useRedux();
-
-    const handleLogout = () => {
-        
-        dispatch(authActions.signOutUser());
-    }
+  if (!user || !user.detail) return null;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer" asChild>
-        <Avatar  className="outline-2 outline-green-400">
-          <AvatarImage src={user.detail.avatarUrl}   referrerPolicy="no-referrer"
-/>
+        <Avatar className="avatar-outline transition">
+          <AvatarImage
+            src={user.detail.avatarUrl}
+            referrerPolicy="no-referrer"
+          />
           <AvatarFallback>
             {user.detail.firstName.charAt(0)}
             {user.detail.lastName.charAt(0)}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-54 bg-sidebar" align="start">
-        <DropdownMenuLabel>Hi !  <span> {user.detail.firstName}</span></DropdownMenuLabel>
+      <DropdownMenuContent className="bg-sidebar w-54" align="start">
+        <DropdownMenuLabel>
+          Hi ! <span> {user.detail.firstName}</span>
+        </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/account/profile">Profile</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/account/setting">Settings</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          Log out
-         </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

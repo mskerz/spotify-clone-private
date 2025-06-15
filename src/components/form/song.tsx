@@ -2,7 +2,7 @@
 
 import Category from "@/types/category";
 import CategoriesDropdown from "../dropdown/categories";
-import { useAddSong } from "@/hook/useSongForm";
+import { useAddSong } from "@/hooks/useSongForm";
 import { insertSong } from "@/libs/api/song";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

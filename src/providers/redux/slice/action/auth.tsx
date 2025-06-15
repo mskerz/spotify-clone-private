@@ -5,7 +5,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { User } from "@/types/user";
 import { FormLoginType, FormRegisterType } from "@/types/form";

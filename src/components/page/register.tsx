@@ -4,8 +4,8 @@ import { toast } from "react-hot-toast";
 import { auth, app } from "@/libs/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useRegisterForm } from "@/hook/forms";
-import { useRedux } from "@/hook/redux";
+import { useRegisterForm } from "@/hooks/forms";
+import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 
 function RegisterPage() {

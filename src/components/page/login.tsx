@@ -1,7 +1,7 @@
 "use client";
 
-import { useLoginForm } from "@/hook/forms";
-import { useRedux } from "@/hook/redux";
+import { useLoginForm } from "@/hooks/forms";
+import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 import { GoogleOriginal as Google } from "devicons-react";
 import Link from "next/link";

@@ -1,22 +1,23 @@
 "use client";
 
-import { useRedux } from "@/hook/redux";
+import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { ThemeToggleButton } from "../button/theme";
 import UserMenuDropDown from "../dropdown/UserMenuDropDown";
+import { SidebarTrigger } from "../ui/sidebar";
+import useAuth  from "@/hooks/auth"
 
 function Navbar() {
-  const { useSelector } = useRedux();
-
-  const { user, isLoggedIn, loading } = useSelector((state) => state.auth);
-
+  const {auth} = useAuth()
+  const {user, isLoggedIn, loading} = auth
  
   return (
-    <nav className="sticky top-0 flex items-center justify-evenly bg-transparent p-2 py-3 backdrop-blur-2xl">
-      <div></div>
+    <nav className="sticky top-0 flex items-center justify-between bg-transparent p-2 py-3 backdrop-blur-2xl">
+              <SidebarTrigger size={"lg"} />
+
       <ul className="flex space-x-8 font-medium">
         <li className="w-sm">
           <input
@@ -31,7 +32,7 @@ function Navbar() {
         {loading ? (
           <Skeleton className="h-9 w-9 rounded-full" />
         ) : user && isLoggedIn ? (
-             <UserMenuDropDown user={user} />
+             <UserMenuDropDown  />
            
         ) : (
           <Link

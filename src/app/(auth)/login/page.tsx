@@ -7,6 +7,8 @@ export const metadata : Metadata = {
 }
 function page() {
   return (
+   
+    
     <LoginPage />
   )
 }

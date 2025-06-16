@@ -9,7 +9,17 @@ import toast from "react-hot-toast";
 import { Divider } from "@/components/common";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 export default function LoginPage() {
   const { form, setField, isFormEmpty, resetLoginForm } = useLoginForm();
   const { dispatch, useSelector } = useRedux();
@@ -32,35 +42,37 @@ export default function LoginPage() {
       return;
     }
     const { email, password } = form;
-     toast
+    toast
       .promise(dispatch(authActions.SignIn({ email, password })).unwrap(), {
-      loading: "Logging in...",
-      success: "Login successful!",
-      error: (err) => err || "Login failed. Please try again.",
+        loading: "Logging in...",
+        success: "Login successful!",
+        error: (err) => err || "Login failed. Please try again.",
       })
       .then(() => {
-      resetLoginForm();
-      navigate.push("/");
+        resetLoginForm();
+        navigate.push("/");
       })
       .catch(() => {});
   };
   return (
-    <div className="container flex items-center justify-center">
-      <div className="mt-15 flex w-full max-w-md flex-col items-center rounded-xl bg-[#1d1d1d] p-15 shadow-lg">
-        <div className="flex flex-col items-center">
-          <h2 className="mt-4 text-xl font-semibold text-white">
-            Sign in to your account
-          </h2>
-          <Button
-            onClick={handleGoogleLogin}
-            className="mt-6 flex cursor-pointer items-center justify-center gap-2 bg-[#1ed760] text-white hover:bg-[#1fdf64]"
-            type="button"
-          >
-            <Google size={24} color="white" />
-            Login with Google
-          </Button>
-        </div>
+    <Card className="my-4 flex w-full max-w-md rounded-xl p-8">
+      <CardHeader className="flex flex-col items-center">
+        <CardTitle className="mt-4 text-left text-2xl font-semibold">
+          Sign in to your account
+        </CardTitle>
+        <CardDescription className="mt-2 text-sm text-gray-400">
+          Enter your email below to login to your account
+        </CardDescription>
+        <CardAction
+          className="mt-4 flex w-full items-center justify-center rounded-md bg-gray-800 p-2 text-white hover:bg-gray-700"
+          onClick={handleGoogleLogin}
+        >
+          <Google className="mr-2" />
+          Sign in with Google
+        </CardAction>
+      </CardHeader>
 
+      <CardContent>
         <Divider />
 
         <form
@@ -68,9 +80,9 @@ export default function LoginPage() {
           className="flex w-full flex-col items-center"
           aria-label="Login form"
         >
-          <div className="mb-4 w-full">
-            <label className="mb-1 block text-white">Email address</label>
-            <input
+          <div className="my-4 w-full">
+            <Label className="mb-3 block text-white">Email address</Label>
+            <Input
               type="email"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
@@ -78,9 +90,9 @@ export default function LoginPage() {
               placeholder="Enter your email"
             />
           </div>
-          <div className="mb-4 w-full">
-            <label className="mb-1 block text-white">Password</label>
-            <input
+          <div className="my-4 w-full">
+            <Label className="mb-3 block text-white">Password</Label>
+            <Input
               type="password"
               value={form.password}
               onChange={(e) => setField("password", e.target.value)}
@@ -95,16 +107,17 @@ export default function LoginPage() {
             Login
           </Button>
         </form>
-        <div className="mt-4 text-sm text-gray-400">
-          {" Don't have an account? "}
-          <Link
-            href="/register"
-            className="font-medium text-[#1ed760] hover:underline"
-          >
-            Sign Up
-          </Link>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+
+      <CardFooter className="flex items-center justify-center">
+       <p className="mt-4 text-sm text-gray-400"> {" Don't have an account?  "}</p>
+        <Link
+          href="/register"
+          className="font-medium text-[#1ed760] hover:underline"
+        >
+          Sign Up
+        </Link>
+      </CardFooter>
+    </Card>
   );
 }

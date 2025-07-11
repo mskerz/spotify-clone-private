@@ -22,30 +22,3 @@ export async function GET(req: Request) {
   return new Response(JSON.stringify(songResponse));
 }
 
-export async function POST(req: Request) {
-  try {
-    const { title, artist, categoryId, releaseDate, coverImage } =
-      await req.json();
-
-    const parsedReleaseDate = new Date(releaseDate);
-    await prisma.song.create({
-      data: {
-        title,
-        artist,
-        categoryId,
-        releaseDate: parsedReleaseDate,
-        coverImage,
-      },
-    });
-
-    return new Response(
-      JSON.stringify({ status: 200, message: "Song created successfully" })
-    );
-  } catch (error) {
-    console.error("Error creating song:", error);
-
-    return new Response(
-      JSON.stringify({ status: 500, message: "Error creating song" })
-    );
-  }
-}

@@ -1,48 +1,99 @@
 "use client";
 
-import { useRedux } from "@/hooks/redux";
-import { authActions } from "@/providers/redux/slice/action";
-import Image from "next/image";
 import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
 import { ThemeToggleButton } from "../button/theme";
-import UserMenuDropDown from "../dropdown/UserMenuDropDown";
 import { SidebarTrigger } from "../ui/sidebar";
-import useAuth  from "@/hooks/auth"
+import useAuth from "@/hooks/auth";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { MenuIcon, XIcon } from "lucide-react";
+import { FaSpotify } from "react-icons/fa";
+import { useState } from "react";
+import AuthButton from "@/components/button/AuthButton";
+import { customMenuItems } from "@/constant/menu-item";
+import { MdLibraryBooks as Collection } from "react-icons/md";
 
 function Navbar() {
-  const {auth} = useAuth()
-  const {user, isLoggedIn, loading} = auth
- 
-  return (
-    <nav className="sticky top-0 flex items-center justify-between bg-transparent p-2 py-3 backdrop-blur-2xl">
-              <SidebarTrigger size={"lg"} />
+  const { auth } = useAuth();
+  const { isLoggedIn } = auth;
 
-      <ul className="flex space-x-8 font-medium">
-        <li className="w-sm">
-          <input
-            type="text"
-            placeholder="Search"
-            className="bg-secondary outline-secondary w-full rounded-full px-4 py-2 outline-1"
-          />
-        </li>
-      </ul>
-      <div className="mr-10 flex space-x-4">
-         <ThemeToggleButton />
-        {loading ? (
-          <Skeleton className="h-9 w-9 rounded-full" />
-        ) : user && isLoggedIn ? (
-             <UserMenuDropDown  />
-           
-        ) : (
-          <Link
-            href="/login"
-            className="rounded-full bg-[#1ED760] px-5 py-2 font-semibold text-black transition-colors hover:bg-[#1db954]"
-          >
-            Login
-          </Link>
-        )}
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuItems = customMenuItems(
+    isLoggedIn
+      ? [
+          {
+            title: "My Collection",
+            url: "/account/playlists",
+            icon: Collection,
+          },
+        ]
+      : [],
+  );
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  return (
+    <nav className="sticky top-0 bg-transparent p-2 py-3 backdrop-blur-2xl">
+      <div className="flex items-center justify-between">
+        <div className="flex w-full items-center justify-between">
+          {!isMobile ? (
+            <>
+              <SidebarTrigger size="lg" />
+
+              <ul className="flex space-x-8 font-medium">
+                <li className="w-sm">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="bg-secondary outline-secondary w-full rounded-full px-4 py-2 outline-1"
+                  />
+                </li>
+              </ul>
+              <div className="mr-10 flex space-x-4">
+                <ThemeToggleButton />
+                <AuthButton />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2">
+                <FaSpotify size={24} className="text-[#1DB954]" />
+                <span className="flex items-end gap-1 text-2xl font-bold">
+                  Spotify
+                  <span className="text-muted-foreground mb-1 align-baseline text-xs font-normal">
+                    Private
+                  </span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ThemeToggleButton />
+                <AuthButton />
+                <button
+                  onClick={toggleMenu}
+                  className="hover:bg-accent p-1.5 transition-opacity"
+                >
+                  {isOpen ? <XIcon /> : <MenuIcon />}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+      {isOpen && isMobile && (
+        <div className="flex flex-col">
+          {menuItems.map((item) => (
+            <Link
+              key={item.url}
+              href={item.url}
+              className="hover:bg-accent p-1.5 text-center transition-opacity"
+            >
+              {item.icon && <item.icon />}
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

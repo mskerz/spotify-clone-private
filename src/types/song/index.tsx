@@ -6,7 +6,15 @@ type Song = {
     artist: string;
     category: string;
     coverImage: string;
+    releaseDate: string
+}
+
+type Playlist = {
+    id: number;
+    name: string;
+    coverImage: string;
+    songs: Song[];
 }
 
 
-export default Song
+export   type { Song , Playlist };

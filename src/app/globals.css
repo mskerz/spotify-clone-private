@@ -43,7 +43,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(94.611% 0.00011 271.152);
+  --background: #ffffff;
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -76,6 +76,9 @@
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --avatar-hover-glow: 0 0 8px 4px rgba(34, 197, 94, 0.5);
+  --button-color : #1ed760;
+  --button-hover-color : #1ed764;
+  
 }
 
 .dark {
@@ -141,4 +144,14 @@
 
 .card-gradient:hover {
   @apply shadow-2xl 
+}
+
+
+.button-spotify {
+  background-color: var(--button-color);
+  color: white;
+}
+
+.button-spotify:hover {
+  background-color: var(--button-hover-color);
 }

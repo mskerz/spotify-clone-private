@@ -33,14 +33,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const isAuthPage = ["/forgot-password","/reset-password" ].includes(pathname);
+ 
+
   return (
     <html lang="en">
       <body
         className={`${poppins.className} ${notoSansThai.className} antialiased`}
       >
-        <ClientLayout>
-           <AppLayout>{children}</AppLayout>
-        </ClientLayout>
+       {isAuthPage ? (
+          children // แสดงเฉพาะ children (ไม่ต้องใช้ ClientLayout / AppLayout)
+        ) : (
+          <ClientLayout>
+            <AppLayout>{children}</AppLayout>
+          </ClientLayout>
+        )}
       </body>
     </html>
   );

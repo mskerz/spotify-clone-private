@@ -1,6 +1,11 @@
+import { Playlist } from "../song";
 
 type ChildrenProps = {
     children: React.ReactNode;
 };
 
-export type { ChildrenProps };
+type PlaylistItemProps = {
+    item : Playlist
+}
+
+export type { ChildrenProps, PlaylistItemProps };

@@ -1,7 +1,7 @@
 "use client";
 
 import { setSongs, setLoading } from "@/providers/redux/slice/song";
-import Song from "@/types/song";
+import {Song} from "@/types/song";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SongList from "./song";

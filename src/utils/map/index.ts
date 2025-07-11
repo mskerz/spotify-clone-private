@@ -39,7 +39,7 @@ function mapUserResponse(user: UserWithInfo): MappedUserResponse {
       firstName: user.userInfo.firstName,
       lastName: user.userInfo.lastName,
       age: user.userInfo.age,
-      phoneNumnber: user.userInfo.phoneNumnber,
+      phoneNumnber: user.userInfo.phoneNumber,
       birthday: user.userInfo.birthday,
       avatarUrl: user.userInfo.avatarUrl,
     },
@@ -50,5 +50,9 @@ function mapUserResponse(user: UserWithInfo): MappedUserResponse {
 function randomAvatar() {
     return  avartar[Math.floor(Math.random() * avartar.length)];
 }
+
+
+
+
 // เอาไว้แค่นี้ก่อน
 export { mapFirebaseProvider, mapUserResponse , randomAvatar };

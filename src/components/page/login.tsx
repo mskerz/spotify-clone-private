@@ -20,9 +20,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-export default function LoginPage() {
+import { withPublic } from "../guard";
+import { setRedirectAfterLogin } from "@/providers/redux/slice/redirect";
+import { useState } from "react";
+import { PasswordInput } from "../ui/custom/password-input";
+function LoginPage() {
   const { form, setField, isFormEmpty, resetLoginForm } = useLoginForm();
   const { dispatch, useSelector } = useRedux();
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useRouter();
 
   const handleGoogleLogin = () => {
@@ -30,6 +36,7 @@ export default function LoginPage() {
   };
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (isFormEmpty) {
       toast("Please fill in all required fields.", {
         icon: "⚠️",
@@ -49,10 +56,13 @@ export default function LoginPage() {
         error: (err) => err || "Login failed. Please try again.",
       })
       .then(() => {
-        resetLoginForm();
-        navigate.push("/");
+        dispatch(setRedirectAfterLogin(true)); // ตั้ง flag ว่าพึ่ง login สำเร็จ
+        navigate.replace("/");
       })
-      .catch(() => {});
+      .finally(() => {
+        // Reset form after login attempt
+        resetLoginForm();
+      });
   };
   return (
     <Card className="my-4 flex w-full max-w-md rounded-xl p-8">
@@ -64,7 +74,7 @@ export default function LoginPage() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction
-          className="mt-4 flex w-full items-center justify-center rounded-md bg-gray-800 p-2 text-white hover:bg-gray-700"
+          className="bg-secondary hover:bg-secondary/80 mt-4 flex w-full cursor-pointer items-center justify-center rounded-md p-2"
           onClick={handleGoogleLogin}
         >
           <Google className="mr-2" />
@@ -81,23 +91,21 @@ export default function LoginPage() {
           aria-label="Login form"
         >
           <div className="my-4 w-full">
-            <Label className="mb-3 block text-white">Email address</Label>
+            <Label className="mb-3 block">Email address</Label>
             <Input
               type="email"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
-              className="w-full rounded-md bg-gray-800 p-2 text-white"
+              className="w-full rounded-md p-2"
               placeholder="Enter your email"
             />
           </div>
           <div className="my-4 w-full">
-            <Label className="mb-3 block text-white">Password</Label>
-            <Input
-              type="password"
+            <Label className="mb-3 block">Password</Label>
+            <PasswordInput
               value={form.password}
               onChange={(e) => setField("password", e.target.value)}
-              className="w-full rounded-md bg-gray-800 p-2 text-white"
-              placeholder="Enter your password"
+              className="w-full rounded-md p-2"
             />
           </div>
           <Button
@@ -109,11 +117,11 @@ export default function LoginPage() {
         </form>
       </CardContent>
 
-      <CardFooter className="flex items-center justify-center">
-       <p className="mt-4 text-sm text-gray-400"> {" Don't have an account?  "}</p>
+      <CardFooter className="flex items-center justify-center gap-2">
+        <p className="text-sm text-gray-400"> {" Don't have an account?  "}</p>
         <Link
           href="/register"
-          className="font-medium text-[#1ed760] hover:underline"
+          className="text-sm font-medium text-[#1ed760] hover:underline"
         >
           Sign Up
         </Link>
@@ -121,3 +129,5 @@ export default function LoginPage() {
     </Card>
   );
 }
+
+export default withPublic(LoginPage);

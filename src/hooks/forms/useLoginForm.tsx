@@ -7,8 +7,8 @@ type FormType = {
 };
   function useLoginForm() {
   const [form, setForm] = useState<FormType>({
-    email: "",
-    password: "",
+    email: "test2@gmail.com",
+    password: "123456",
   });
   const isFormEmpty =
     !form.email ||

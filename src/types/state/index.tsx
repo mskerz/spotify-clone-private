@@ -1,4 +1,4 @@
-import Song from "../song";
+import  { Playlist, Song } from "../song";
 import { User } from "../user";
 
 type SongState = {
@@ -9,6 +9,14 @@ type SongState = {
   error: string | null;
 };
 
+type PlaylistUserState = {
+  playlistUsers: Playlist[];
+  filteredPlaylistUsers: Playlist[];
+  selectedPlaylist: Playlist | null;
+  loading: boolean;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+};
 
 type AuthState = {
   user: User | null;
@@ -18,4 +26,4 @@ type AuthState = {
   error: string | null;
 };
 
-export type { SongState , AuthState };
+export type { SongState , AuthState , PlaylistUserState };

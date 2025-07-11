@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useRegisterForm } from "@/hooks/forms";
 import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
+import { withPublic } from "../guard";
 
 function RegisterPage() {
   const { form, setField, resetRegisterForm, isFormEmpty } = useRegisterForm();
@@ -157,4 +158,4 @@ function RegisterPage() {
     </div>
   );
 }
-export default RegisterPage;
+export default withPublic(RegisterPage);

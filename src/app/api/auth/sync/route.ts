@@ -1,47 +1,18 @@
-import { auth } from "@/libs/firebase/server";
-import { mapFirebaseProvider, mapUserResponse, randomAvatar } from "@/utils/map";
+import {
+  mapFirebaseProvider,
+  mapUserResponse,
+  randomAvatar,
+} from "@/utils/map";
 import prisma from "@/libs/prisma";
 import { UserWithInfo } from "@/types/user/prisma";
+import { authMiddeware } from "@/middleware/auth";
 
 export async function GET(request: Request) {
   try {
-    const header = request.headers.get("Authorization");
-    if (!header || !header.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ message: "Unauthorized" }), {
-        status: 401,
-      });
-    }
-
-    const token = header.split(" ")[1];
-    const decodeUser = await auth.verifyIdToken(token);
-    const provider = decodeUser.firebase.sign_in_provider;
-    let user: UserWithInfo | null = await prisma.user.findUnique({
-      where: { firebaseUid: decodeUser.uid },
-      include: { userInfo: true },
-    });
+    const user = await authMiddeware(request);
+    
     if (!user) {
-      user = await prisma.user.create({
-        data: {
-          firebaseUid: decodeUser.uid,
-          email: decodeUser.email || "",
-          role: "USER",
-          provider: mapFirebaseProvider(provider),
-          userInfo: {
-            create: {
-              firstName: decodeUser.name?.split(" ")[0] || "",
-              lastName: decodeUser.name?.split(" ").slice(1).join(" ") || "",
-              avatarUrl: decodeUser.picture || randomAvatar(),
-              phoneNumnber: "N/A",
-              age: 18, // Provide a default age or extract from decodeUser if available
-            },
-          },
-        },
-        include: { userInfo: true },
-      });
-    }
-
-    if (!user.userInfo) {
-      return new Response(JSON.stringify({ message: "User info not found" }), {
+      return new Response(JSON.stringify({ message: "User not found" }), {
         status: 404,
       });
     }
@@ -56,8 +27,6 @@ export async function GET(request: Request) {
         status: 500,
       });
     }
-    return new Response(JSON.stringify({ message: "Error syncing user" }), {
-      status: 500,
-    });
+   
   }
 }

@@ -3,7 +3,7 @@
 
 import { checkUserSession } from "@/providers/redux/slice/action/auth";
 import { AppDispatch } from "@/providers/redux/store";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 type Props = {
@@ -12,10 +12,15 @@ type Props = {
 
 function AuthSessionProvider({ children }: Props) {
     const dispatch = useDispatch<AppDispatch>();
+    
 
-    useEffect(() => {
+    const checkSession = useCallback(() => {
         dispatch(checkUserSession());
     }, [dispatch]);
+
+    useEffect(() => {
+        checkSession();
+    }, [checkSession]);
 
 
     return <>{children}</>

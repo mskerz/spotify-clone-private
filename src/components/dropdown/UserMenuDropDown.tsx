@@ -46,7 +46,7 @@ function UserMenuDropDown() {
             <Link href="/account/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/account/setting">Settings</Link>
+            <Link href="/setting">Settings</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

@@ -1,4 +1,5 @@
-import Song from "@/types/song";
+import api from "@/lib/api";
+import {Playlist, Song} from "@/types/song";
 
 async function getSongs(): Promise<Song[]> {
   try {
@@ -12,6 +13,10 @@ async function getSongs(): Promise<Song[]> {
     return [];
   }
 }
+
+
+
+
 
 async function insertSong(song: {
   title: string;
@@ -29,7 +34,6 @@ async function insertSong(song: {
       body: JSON.stringify(song),
     });
     const data = await res.json(); 
-   console.log(data);
    
     return data;
   } catch (error) {

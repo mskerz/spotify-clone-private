@@ -1,6 +1,8 @@
+
+import ProfilePage from "@/components/page/auth/profile"
 function page() {
   return (
-    <div>Profile</div>
+    <ProfilePage />
   )
 }
 export default page

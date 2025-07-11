@@ -1,34 +1,36 @@
-import { HttpClient } from "./http";
+
+
+
+// libs/axios.ts
+import axios from "axios";
 import { auth } from "@/libs/firebase/client";
+import { BASE_URL } from "@/constant";
 
-async function getFirebaseIdToken(): Promise<string | null> {
-  const user = auth.currentUser;
-  if (user) {
-    return await user.getIdToken();
-  }
-  return null;
-}
+const api =  axios.create({
+  baseURL: BASE_URL,
+  timeout: 5000, 
+  
+}) 
 
-const api  = new HttpClient();
+api.interceptors.request.use(async (config) => {
 
+  if (typeof window === "undefined") return config; // ไม่ทำงานบน server
 
-api.addRequestInterceptor(async (input, init) => {
-  const token = await getFirebaseIdToken();
+  const token = await auth.currentUser?.getIdToken();
   if (token) {
-    const headers = new Headers(init?.headers || {});
-    headers.set("Authorization", `Bearer ${token}`);
-    return [input, { ...init, headers }];
+    config.headers.Authorization = `Bearer ${token}`;
   }
-  return [input, init];
+   
+  return config;
 });
 
-// Example: Add a response interceptor
-api.addResponseInterceptor(async (response) => {
-  if (!response.ok) {
-    // Handle errors globally
-    console.error("Fetch error:", response.status);
-  }
-  return response;
-});
+api.interceptors.response.use(
+  (response) => response,
+  (error) => Promise.reject(error)
+);
 
-export default api;
+
+
+
+export default api
+ 

@@ -1,5 +1,11 @@
-import { AddNewPlaylistUser, getPlayListUser,getPlayListbyId } from "@/libs/api/playlist";
-import { Playlist } from "@/types/song";
+import { AUTH_API } from "@/constant";
+import api from "@/lib/api";
+import {
+  AddNewPlaylistUser,
+  getPlayListUser,
+  getPlayListbyId,
+} from "@/libs/api/playlist";
+import { Playlist, Song } from "@/types/song";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getPlaylist = createAsyncThunk<
@@ -31,7 +37,7 @@ export const getPlaylistById = createAsyncThunk<
     }
     return rejectWithValue("Unknown error");
   }
-})
+});
 
 export const AddNewPlaylist = createAsyncThunk<
   Playlist,
@@ -52,11 +58,40 @@ export const AddNewPlaylist = createAsyncThunk<
   }
 });
 
-/*
-ถ้า จะ render html จาก server มันคงไม่ได้แล้วล่ะ เพราะมันเกี่ยวกับ user 
-ที่ต้องแนบ token 
+export const addSongToPlaylist = createAsyncThunk<
+  Song,
+  { playlistId: number; songId: number },
+  { rejectValue: string }
+>("playlist/addSong", async (body, { rejectWithValue }) => {
+  try {
+    const response = await api.post(`${AUTH_API.ADD_SONG_TO_PLAYLIST}`, {
+      playlistId: body.playlistId,
+      songId: body.songId,
+    });
+    return response.data.song;
+  } catch (error) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue("Unknown error");
+  }
+});
 
-คงต้องใช้วิธี fetch ผ่าน client ใน async thunk 
-
-
-*/
+export const removeSongFromPlaylist = createAsyncThunk<
+  number,
+  { playlistId: number; songId: number },
+  { rejectValue: string }
+>("playlist/removeSong", async (body, { rejectWithValue }) => {
+  try {
+    const response = await api.post(`${AUTH_API.REMOVE_SONG_FROM_PLAYLIST}`, {
+      playlistId: body.playlistId,
+      songId: body.songId,
+    });
+    return response.data.songId;
+  } catch (error) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    }
+    return rejectWithValue("Unknown error");
+  }
+});

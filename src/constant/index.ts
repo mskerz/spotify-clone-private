@@ -40,13 +40,24 @@ export class AUTH_API {
 
 export class ADMIN_API {
   public static BASE_URL = "/admin";
-
+  //  /admin/dashboard
+  public static DASHBOARD = `${ADMIN_API.BASE_URL}/dashboard`; // GET
   //   /admin/songs
   public static SONGS = `${ADMIN_API.BASE_URL}/songs`;  // GET , POST
 
   //   /admin/songs/[id] 
   public static SONG_BY_ID = (id: string) => `${ADMIN_API.SONGS}/${id}`;     // PUT , DELETE
 
-  //   /admin/super/create
-  public static SUPER_CREATE = `${ADMIN_API.BASE_URL}/super/create`; // POST
+  // super admin routes
+  public static ADMIN_USERS =  `${this.DASHBOARD}/users`;  // GET
+
+  public static ADMIN_USERS_CREATE =  `${this.ADMIN_USERS}/create`;  // POST
+
+  public static ADMIN_USERS_EDIT =  `${this.ADMIN_USERS}/edit`;  // PUT
+
+  public static ADMIN_USERS_DELETE =  `${this.ADMIN_USERS}/delete`;  // DELETE
+
 }
+
+export const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "";
+export const ADMIN_USER_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "";

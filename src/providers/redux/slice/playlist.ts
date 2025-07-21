@@ -1,7 +1,13 @@
-import { Playlist } from "@/types/song";
+import { Playlist, Song } from "@/types/song";
 import { PlaylistUserState } from "@/types/state";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AddNewPlaylist, getPlaylist, getPlaylistById } from "./action/playlist";
+import {
+  AddNewPlaylist,
+  addSongToPlaylist,
+  getPlaylist,
+  getPlaylistById,
+  removeSongFromPlaylist,
+} from "./action/playlist";
 
 const initState: PlaylistUserState = {
   playlistUsers: [],
@@ -26,12 +32,14 @@ const playlistUserSlice = createSlice({
 
     getDetailPlaylistById: (state, action: PayloadAction<number>) => {
       state.selectedPlaylist =
-        state.playlistUsers.find((playlist) => playlist.id === action.payload) ?? null;
+        state.playlistUsers.find(
+          (playlist) => playlist.id === action.payload,
+        ) ?? null;
     },
 
     clearDetailPlaylist: (state) => {
       state.selectedPlaylist = null;
-    }
+    },
   },
 
   extraReducers: (builder) => {
@@ -65,9 +73,10 @@ const playlistUserSlice = createSlice({
           state.selectedPlaylist = action.payload;
         },
       )
-      .addCase(getPlaylistById.rejected, (state) => {
+      .addCase(getPlaylistById.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
+        state.error = action.payload ?? "Get playlist failed";
       })
 
       // add playlist
@@ -87,10 +96,49 @@ const playlistUserSlice = createSlice({
       .addCase(AddNewPlaylist.rejected, (state) => {
         state.loading = false;
         state.status = "failed";
+      })
+      .addCase(addSongToPlaylist.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+      })
+      .addCase(
+        addSongToPlaylist.fulfilled,
+        (state, action: PayloadAction<Song>) => {
+          state.loading = false;
+          state.status = "succeeded";
+          if (state.selectedPlaylist) {
+            state.selectedPlaylist.songs.push(action.payload);
+          }
+        },
+      )
+      .addCase(addSongToPlaylist.rejected, (state) => {
+        state.loading = false;
+        state.status = "failed";
+      })
+      .addCase(removeSongFromPlaylist.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+      })
+      .addCase(
+        removeSongFromPlaylist.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.loading = false;
+          state.status = "succeeded";
+          if (state.selectedPlaylist) {
+            state.selectedPlaylist.songs = state.selectedPlaylist.songs.filter(
+              (song) => song.id !== action.payload,
+            );
+          }
+        },
+      )
+      .addCase(removeSongFromPlaylist.rejected, (state) => {
+        state.loading = false;
+        state.status = "failed";
       });
   },
 });
 
-export const { setPlayListUsers,getDetailPlaylistById , clearDetailPlaylist } = playlistUserSlice.actions;
+export const { setPlayListUsers, getDetailPlaylistById, clearDetailPlaylist } =
+  playlistUserSlice.actions;
 
 export default playlistUserSlice.reducer;

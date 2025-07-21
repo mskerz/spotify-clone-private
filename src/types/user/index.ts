@@ -1,7 +1,9 @@
+type UserRole = "USER" | "ADMIN" | "SUPER_ADMIN";
+
 type User = {
   name: string;
   email: string;
-  role: string;
+  role: UserRole;
   provider: string;
   firebaseUid: string;
   createdAt: Date;
@@ -18,4 +20,16 @@ type UserInfo = {
   avatarUrl: string;
 };
 
-export type { User };
+ 
+ 
+
+type AdminUser = {
+  index: number;
+  id: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+  detail: UserInfo;
+};
+
+export type { User, AdminUser };

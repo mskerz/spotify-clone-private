@@ -1,33 +1,39 @@
 "use client";
 
 import Category from "@/types/category";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
- 
 type CategoriesDropdownProps = {
-  categories: Category[]
-  onChange: (selectedCategoryId: number) => void
-}
+  categories: Category[];
+  onChange: (selectedCategoryId: number) => void;
+};
 
-function CategoriesDropdown( {categories , onChange}: CategoriesDropdownProps) {
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCategoryId = parseInt(e.target.value);
+function CategoriesDropdown({ categories, onChange }: CategoriesDropdownProps) {
+  const handleCategoryChange = (value: string) => {
+    const selectedCategoryId = parseInt(value);
     onChange(selectedCategoryId);
-  }
+  };
+
   return (
-         <select
-            id="category"
-            name="category"
-            className="w-full bg-[#282828] border border-[#333] rounded-md text-white px-4 py-3"
-             
-            onChange={handleCategoryChange}
-        >
-            {categories.map((category) => (
-               <option key={category.id} value={category.id}>
-                  {category.name}                                       
-               </option>
-            ))}
-         </select>
-  )
+    <Select onValueChange={handleCategoryChange}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select a category" />
+      </SelectTrigger>
+      <SelectContent >
+        {categories.map((category) => (
+          <SelectItem key={category.id} value={category.id.toString()}>
+            {category.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
+
 export default CategoriesDropdown;

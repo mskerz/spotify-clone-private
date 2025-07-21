@@ -11,7 +11,8 @@ function useAuth() {
       
     const handleSignOut = () => {
         dispatch(authActions.signOutUser());
-        navigate.push("/login");
+        
+        navigate.push("/");
 
     }
 

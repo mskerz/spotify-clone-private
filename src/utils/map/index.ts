@@ -16,14 +16,53 @@ type MappedUserResponse = {
     avatarUrl: string | null;
   };
 };
+
+type MappedAdminResponse = {
+  index: number;
+  id: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+  detail: {
+    firstName: string | null;
+    lastName: string | null;
+    age: number;
+    phoneNumnber: string | null;
+    birthday: Date | null;
+    avatarUrl: string | null;
+  };
+};
 function mapFirebaseProvider(provider: string): AuthProvider {
   switch (provider) {
     case "google.com":
       return AuthProvider.GOOGLE;
-    case "password":
     default:
       return AuthProvider.LOCAL;
   }
+}
+
+function mapAdminResponse(
+  user: UserWithInfo,
+  index: number,
+): MappedAdminResponse {
+  if (!user.userInfo) {
+    throw new Error("User info not found");
+  }
+  return {
+    index,
+    id: user.id,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    detail: {
+      firstName: user.userInfo.firstName,
+      lastName: user.userInfo.lastName,
+      age: user.userInfo.age,
+      phoneNumnber: user.userInfo.phoneNumber,
+      birthday: user.userInfo.birthday,
+      avatarUrl: user.userInfo.avatarUrl,
+    },
+  };
 }
 
 function mapUserResponse(user: UserWithInfo): MappedUserResponse {
@@ -46,13 +85,9 @@ function mapUserResponse(user: UserWithInfo): MappedUserResponse {
   };
 }
 
-
 function randomAvatar() {
-    return  avartar[Math.floor(Math.random() * avartar.length)];
+  return avartar[Math.floor(Math.random() * avartar.length)];
 }
 
-
-
-
 // เอาไว้แค่นี้ก่อน
-export { mapFirebaseProvider, mapUserResponse , randomAvatar };
+export { mapFirebaseProvider, mapUserResponse , mapAdminResponse, randomAvatar };

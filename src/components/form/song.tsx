@@ -1,11 +1,14 @@
 "use client";
-
 import Category from "@/types/category";
 import CategoriesDropdown from "../dropdown/categories";
 import { useAddSong } from "@/hooks/useSongForm";
 import { insertSong } from "@/libs/api/song";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 function SongForm({ categories }: { categories: Category[] }) {
   const {
@@ -21,144 +24,136 @@ function SongForm({ categories }: { categories: Category[] }) {
     setCoverImage,
     reset,
   } = useAddSong();
-  const navigate = useRouter();
-
+  const router = useRouter();
+  
   const onAddSong = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const song = {
-        title,
-        artist,
-        categoryId,
-        releaseDate,
-        coverImage,
-      };
-
+      const song = { title, artist, categoryId, releaseDate, coverImage };
       const response = await insertSong(song);
       if (response.status === 200) {
         reset();
-        navigate.push("/");
+        router.push("/");
       }
     } catch (error) {
-      console.error("❌ Error adding song:", error);
+      console.error("Error adding song:", error);
     }
   };
+
   return (
-   <form
-  onSubmit={onAddSong}
-  className="mt-10 flex flex-col justify-center gap-6 w-full max-w-4xl mx-auto bg-[#121212] p-8 rounded-3xl shadow-lg border border-[#282828]"
->
-  <h2 className="text-3xl font-bold text-white mb-6 text-center tracking-wide">
-    เพิ่มเพลงใหม่
-  </h2>
-
-  <div>
-    <label
-      htmlFor="songName"
-      className="block mb-2 text-sm font-semibold text-[#B3B3B3]"
-    >
-      ชื่อเพลง
-    </label>
-    <input
-      type="text"
-      id="songName"
-      name="songName"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-      className="w-full bg-[#282828] border border-[#333] rounded-md px-4 py-3 text-white placeholder-[#565656] focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-      placeholder="กรอกชื่อเพลง"
-      required
-    />
-  </div>
-
-  <div>
-    <label
-      htmlFor="artist"
-      className="block mb-2 text-sm font-semibold text-[#B3B3B3]"
-    >
-      ศิลปิน
-    </label>
-    <input
-      type="text"
-      id="artist"
-      name="artist"
-      value={artist}
-      onChange={(e) => setArtist(e.target.value)}
-      className="w-full bg-[#282828] border border-[#333] rounded-md px-4 py-3 text-white placeholder-[#565656] focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-      placeholder="กรอกชื่อศิลปิน"
-      required
-    />
-  </div>
-
-  <div>
-    <label
-      htmlFor="category"
-      className="block mb-2 text-sm font-semibold text-[#B3B3B3]"
-    >
-      หมวดหมู่
-    </label>
-    <CategoriesDropdown
-      categories={categories}
-      onChange={setCategoryId}
+    <div className="flex justify-center items-center min-h-screen p-4">
+      <Card className="w-full max-w-2xl shadow-lg border-0 ">
+      <CardHeader className="text-center pb-6">
+        <CardTitle className="text-3xl font-bold">
+        Add New Song
+        </CardTitle>
+        <p className="mt-2">Fill in the details to add a new song to spotify</p>
+      </CardHeader>
       
-    />
-  </div>
+      <CardContent className="p-8">
+        <form onSubmit={onAddSong} className="space-y-6">
+        {/* Song Title */}
+        <div className="space-y-2">
+          <Label htmlFor="songName" className="text-sm font-medium">
+          Song Title
+          </Label>
+          <Input
+          id="songName"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter song title"
+          required
+          
+          />
+        </div>
 
-  <div>
-    <label
-      htmlFor="releaseDate"
-      className="block mb-2 text-sm font-semibold text-[#B3B3B3]"
-    >
-      วันที่เผยแพร่
-    </label>
-    <input
-      type="date"
-      id="releaseDate"
-      name="releaseDate"
-      value={releaseDate}
-      onChange={(e) => setReleaseDate(e.target.value)}
-      className="w-full bg-[#282828] border border-[#333] rounded-md px-4 py-3 text-white placeholder-[#565656] focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-      required
-    />
-  </div>
+        {/* Artist */}
+        <div className="space-y-2">
+          <Label htmlFor="artist" className="text-sm font-medium">
+          Artist
+          </Label>
+          <Input
+          id="artist"
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+          placeholder="Enter artist name"
+          required
+          
+          />
+        </div>
 
-  <div>
-    <label
-      htmlFor="cover"
-      className="block mb-2 text-sm font-semibold text-[#B3B3B3]"
-    >
-      รูปปกเพลง
-    </label>
-    {coverImage && (
-      <Image
-        src={coverImage}
-        alt="Cover"
-        width={200}
-        height={200}
-        loading="lazy"
-        className="my-4 rounded-md shadow-lg  outline-2 outline-[#1DB954]"
-      />
-    )}
-    <input
-      type="text"
-      id="cover"
-      name="cover"
-      value={coverImage}
-      onChange={(e) => setCoverImage(e.target.value)}
-      className="w-full bg-[#282828] border border-[#333] rounded-md px-4 py-3 text-white placeholder-[#565656] focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-      placeholder="ลิงก์รูปปกเพลง"
-      required
-    />
-  </div>
+        {/* Category and Release Date - Side by Side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+          <Label htmlFor="category" className="text-sm font-medium">
+            Category
+          </Label>
+          <CategoriesDropdown
+            categories={categories}
+            onChange={setCategoryId}
+          />
+          </div>
+          
+          <div className="space-y-2">
+          <Label htmlFor="releaseDate" className="text-sm font-medium">
+            Release Date
+          </Label>
+          <Input
+            id="releaseDate"
+            type="date"
+            value={releaseDate}
+            onChange={(e) => setReleaseDate(e.target.value)}
+            required
+          />
+          </div>
+        </div>
 
-  <button
-    type="submit"
-    className="bg-[#1DB954] hover:bg-[#1ed760cc] transition text-black font-semibold rounded-full py-3 mt-4 shadow-lg"
-  >
-    เพิ่มเพลง
-  </button>
-</form>
+        {/* Cover Image */}
+        <div className="space-y-3">
+          <Label htmlFor="coverImage" className="text-sm font-medium">
+          Cover Image URL
+          </Label>
+          
+          {coverImage && (
+          <div className="flex justify-center">
+            <div className="relative overflow-hidden rounded-lg border-2 shadow-md">
+            <Image
+              src={coverImage}
+              alt="Cover Image Preview"
+              width={200}
+              height={200}
+              className="object-cover"
+              loading="lazy"
+            />
+            </div>
+          </div>
+          )}
+          
+          <Input
+          id="coverImage"
+          type="url"
+          value={coverImage}
+          onChange={(e) => setCoverImage(e.target.value)}
+          placeholder="Paste image URL (e.g., https://example.com/image.jpg)"
+          required
+          
+          />
+        </div>
 
+        {/* Submit Button */}
+        <div className="pt-4">
+          <Button 
+          type="submit" 
+          className="w-full button-spotify font-semibold rounded-lg shadow-lg transition-all duration-500 transform hover:scale-95"
+          >
+          Insert Song
+          </Button>
+        </div>
+        </form>
+      </CardContent>
+      </Card>
+    </div>
   );
 }
+
 export default SongForm;

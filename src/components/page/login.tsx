@@ -1,6 +1,5 @@
 "use client";
 
-import { useLoginForm } from "@/hooks/forms";
 import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 import { GoogleOriginal as Google } from "devicons-react";
@@ -24,20 +23,37 @@ import { withPublic } from "../guard";
 import { setRedirectAfterLogin } from "@/providers/redux/slice/redirect";
 import { useState } from "react";
 import { PasswordInput } from "../ui/custom/password-input";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validationFormLogin, FormLoginType } from "@/validation/login";
+
 function LoginPage() {
-  const { form, setField, isFormEmpty, resetLoginForm } = useLoginForm();
+  const {
+    register,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormLoginType>({
+    resolver: zodResolver(validationFormLogin),
+    mode: "onChange",
+    defaultValues: {
+      email: "test2@gmail.com",
+      password: "123456",
+      
+    },
+  });
   const { dispatch, useSelector } = useRedux();
-  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useRouter();
 
   const handleGoogleLogin = () => {
     dispatch(authActions.SignInWithGoogle());
   };
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit =  (data: FormLoginType) => {
 
-    if (isFormEmpty) {
+    if (!data.email || !data.password) {
       toast("Please fill in all required fields.", {
         icon: "⚠️",
         style: {
@@ -48,7 +64,7 @@ function LoginPage() {
       });
       return;
     }
-    const { email, password } = form;
+    const { email, password } = data;
     toast
       .promise(dispatch(authActions.SignIn({ email, password })).unwrap(), {
         loading: "Logging in...",
@@ -61,7 +77,7 @@ function LoginPage() {
       })
       .finally(() => {
         // Reset form after login attempt
-        resetLoginForm();
+        reset();
       });
   };
   return (
@@ -86,7 +102,7 @@ function LoginPage() {
         <Divider />
 
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleSubmit(onSubmit)}
           className="flex w-full flex-col items-center"
           aria-label="Login form"
         >
@@ -94,19 +110,26 @@ function LoginPage() {
             <Label className="mb-3 block">Email address</Label>
             <Input
               type="email"
-              value={form.email}
-              onChange={(e) => setField("email", e.target.value)}
+
               className="w-full rounded-md p-2"
               placeholder="Enter your email"
+              {...register("email")}
             />
+            {errors.email && (
+              <span className="text-red-500 text-sm">{errors.email.message}</span>
+            )}
           </div>
           <div className="my-4 w-full">
             <Label className="mb-3 block">Password</Label>
             <PasswordInput
-              value={form.password}
-              onChange={(e) => setField("password", e.target.value)}
+            
               className="w-full rounded-md p-2"
+              placeholder="Enter your password"
+              {...register("password")}
             />
+            {errors.password && (
+              <span className="text-red-500 text-sm">{errors.password.message}</span>
+            )}
           </div>
           <Button
             type="submit"

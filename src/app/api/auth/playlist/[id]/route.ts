@@ -6,25 +6,33 @@ import { authMiddeware } from "@/middleware/auth";
  
 
 
-export async function GET(request: Request , { params }: { params: { id: string } }) {
+export async function GET(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const user = await authMiddeware(request);
 
-    const { id } = await params;
+    const { id } = await context.params; 
     const playlist = await prisma.playlist.findFirst({
+      select: {
+        id: true,
+        name: true,
+        coverImage: true,
+        songs: true,
+      }  ,
       where: {
         userId: user?.id,
         id: Number(id),
-      },
-      include: {
-        songs: true,
-      },
+      }
     });
+
     if (!playlist) {
       return new Response(JSON.stringify({ message: "Playlist not found" }), {
         status: 404,
       });
     }
+
     return new Response(JSON.stringify(playlist));
   } catch (error) {
     if (error instanceof Error) {
@@ -35,7 +43,9 @@ export async function GET(request: Request , { params }: { params: { id: string 
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+
+export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const user = await authMiddeware(request);
     const { playlistName, coverImagePlaylist } = await request.json();

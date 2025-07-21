@@ -14,7 +14,7 @@ async function getPlayListUser(): Promise<Playlist[]> {
 
 async function getPlayListbyId(id: string): Promise<Playlist> {
   try {
-    const response = await api.get(`${AUTH_API.PLAYLIST_BY_ID(id)}`);
+    const response = await api.get(`${AUTH_API.PLAYLIST_BASE_URL}/${id}`);
     const playlist = await response.data;
     return playlist;
   } catch (error) {

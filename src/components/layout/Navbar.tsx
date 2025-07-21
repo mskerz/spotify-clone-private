@@ -41,15 +41,7 @@ function Navbar() {
             <>
               <SidebarTrigger size="lg" />
 
-              <ul className="flex space-x-8 font-medium">
-                <li className="w-sm">
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="bg-secondary outline-secondary w-full rounded-full px-4 py-2 outline-1"
-                  />
-                </li>
-              </ul>
+
               <div className="mr-10 flex space-x-4">
                 <ThemeToggleButton />
                 <AuthButton />

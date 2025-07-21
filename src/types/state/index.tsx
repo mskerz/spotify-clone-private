@@ -1,5 +1,6 @@
+import { Dashbooard } from "../dashboard";
 import  { Playlist, Song } from "../song";
-import { User } from "../user";
+import { AdminUser, User } from "../user";
 
 type SongState = {
   songs: Song[];
@@ -26,4 +27,12 @@ type AuthState = {
   error: string | null;
 };
 
-export type { SongState , AuthState , PlaylistUserState };
+type AdminState = {
+  dashboard : Dashbooard
+  admin_users: AdminUser[]
+  loading: boolean;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+};
+
+export type { SongState , AuthState , PlaylistUserState , AdminState };

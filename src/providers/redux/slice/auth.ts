@@ -45,7 +45,7 @@ const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(SignIn.fulfilled, (state, action: PayloadAction<User>) => {
-         state.status = "succeeded";
+        state.status = "succeeded";
         state.isLoggedIn = true;
         state.user = action.payload;
       })
@@ -60,7 +60,6 @@ const authSlice = createSlice({
       .addCase(checkUserSession.pending, (state) => {
         state.loading = true;
         state.status = "loading";
-        
       })
       .addCase(
         checkUserSession.fulfilled,
@@ -79,7 +78,8 @@ const authSlice = createSlice({
           state.status = "failed";
           state.error = action.payload ?? "Login failed";
         },
-      ).addCase(signOutUser.pending, (state) => {
+      )
+      .addCase(signOutUser.pending, (state) => {
         state.loading = true;
         state.status = "loading";
       })
@@ -88,27 +88,36 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.isLoggedIn = false;
         state.user = null;
-      }).addCase(signOutUser.rejected, (state, action: PayloadAction<string | undefined>) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.payload ?? "Login failed";
       })
+      .addCase(
+        signOutUser.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.status = "failed";
+          state.error = action.payload ?? "Login failed";
+        },
+      )
       .addCase(SignInWithGoogle.pending, (state) => {
         state.loading = true;
         state.status = "loading";
       })
-      .addCase(SignInWithGoogle.fulfilled, (state, action: PayloadAction<User>) => {
-        state.loading = false;
-        state.status = "succeeded";
-        state.isLoggedIn = true;
-        state.user = action.payload;
-      }).addCase(SignInWithGoogle.rejected, (state, action: PayloadAction<string | undefined>) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.payload ?? "Login failed";
-      })
-      
-      ;
+      .addCase(
+        SignInWithGoogle.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.loading = false;
+          state.status = "succeeded";
+          state.isLoggedIn = true;
+          state.user = action.payload;
+        },
+      )
+      .addCase(
+        SignInWithGoogle.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.status = "failed";
+          state.error = action.payload ?? "Login failed";
+        },
+      );
   },
 });
 

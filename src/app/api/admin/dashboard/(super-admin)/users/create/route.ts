@@ -1,7 +1,11 @@
+import { fakerTH } from "@faker-js/faker";
+
 import { avartar } from "@/constant";
 import { auth } from "@/libs/firebase/server";
 import prisma from "@/libs/prisma";
 import { superAdminMiddleware } from "@/middleware/auth";
+import { calculateAge } from "@/utils/calculate";
+import { mapAdminResponse } from "@/utils/map";
 
 // route  : /api/admin/create ->  POST  : Create admin
 export async function POST(request: Request) {
@@ -18,9 +22,8 @@ export async function POST(request: Request) {
         },
       );
     }
-    const { email, password, firstname, lastname, phoneNumber, age } =
-      await request.json();
-    if (!email || !password || !firstname || !lastname) {
+    const { email, password, firstName, lastName } = await request.json();
+    if (!email || !password || !firstName || !lastName) {
       return new Response(
         JSON.stringify({ message: "Missing required fields" }),
         {
@@ -33,25 +36,46 @@ export async function POST(request: Request) {
       email,
       password,
     });
-    const avartarRandom = avartar[Math.floor(Math.random() * avartar.length)];
-    await prisma.user.create({
+    const avartarRandom = fakerTH.image.avatar();
+    const randomPhone = fakerTH.phone.number({ style: "national" });
+    const randomBirthday = fakerTH.date.birthdate();
+    const age = calculateAge(randomBirthday);
+
+    // ก่อนสร้าง admin
+    const adminCount = await prisma.user.count({
+      where: {
+        role: "ADMIN",
+      },
+    });
+
+    const newAdmin = await prisma.user.create({
       data: {
         firebaseUid: firebaseUser.uid,
         email: firebaseUser.email || "",
+        provider: "LOCAL",
         role: "ADMIN",
         userInfo: {
           create: {
-            firstName: firstname,
-            lastName: lastname,
+            firstName: firstName,
+            lastName: lastName,
             avatarUrl: avartarRandom,
-            phoneNumber: phoneNumber || "N/A",
-            age: parseInt(age) || 18,
+            phoneNumber: randomPhone,
+            age: age,
+            birthday: randomBirthday,
           },
         },
       },
+      include: {
+        userInfo: true,
+      },
     });
+
+    const mapppedNewAdmin = mapAdminResponse(newAdmin, adminCount + 1);
     return new Response(
-      JSON.stringify({ message: "User Admin created successfully" }),
+      JSON.stringify({
+        message: "User Admin created successfully",
+        newAdmin: mapppedNewAdmin,
+      }),
       {
         status: 201,
       },

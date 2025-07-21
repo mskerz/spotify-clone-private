@@ -7,4 +7,6 @@ type UserWithInfo = Prisma.UserGetPayload<{
   };
 }>;
 
+
+
 export type { UserWithInfo };

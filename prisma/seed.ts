@@ -19,6 +19,7 @@ async function main() {
       email,
       password,
       displayName: "Super Admin",
+      
     });
 
     await prisma.user.create({

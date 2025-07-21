@@ -1,11 +1,8 @@
-import {
-  mapFirebaseProvider,
-  mapUserResponse,
-  randomAvatar,
-} from "@/utils/map";
+
 import prisma from "@/libs/prisma";
 import { UserWithInfo } from "@/types/user/prisma";
 import { authMiddeware } from "@/middleware/auth";
+import { mapUserResponse } from "@/utils/map";
 
 export async function GET(request: Request) {
   try {

@@ -7,13 +7,10 @@ import Image from "next/image";
 import PlaylistLoadingColumn from "./colum/loading";
 import ColumnPlaylist from "./colum";
 import GridPlaylist from "./grid";
+import usePlaylist from "@/hooks/auth/playlist";
 
 function Playlists({ display }: ItemDisplayType) {
-  const { useSelector } = useRedux();
-  const { filteredPlaylistUsers: playlists, loading } = useSelector(
-    (state) => state.playlist,
-  );
-
+  const {playlists,status:{loading}}= usePlaylist();
   return (
     <>
       {display === ItemDisplay.COLUMN ? (
@@ -24,7 +21,7 @@ function Playlists({ display }: ItemDisplayType) {
             playlists.map((playlist) => (
               <ColumnPlaylist key={playlist.id} item={playlist} />
             ))
-          ) : null}
+          ) :  <p className="col-span-full text-center">No playlists found.</p>}
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">

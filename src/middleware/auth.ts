@@ -62,7 +62,7 @@ export async function getUser(DecodeUser: DecodedIdToken) {
 
 export async function adminMiddleware(req: Request) {
   const user = await authMiddeware(req);
-  return user?.role === "ADMIN";
+  return user?.role === "ADMIN"|| user?.role === "SUPER_ADMIN";
 }
 
 

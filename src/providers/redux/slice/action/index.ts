@@ -1,3 +1,4 @@
+import { createAdminUser, deleteAdminUser, fetchAdmins, fetchDashboard } from "./admin";
 import {
   SignIn,
   SignUp,
@@ -5,7 +6,7 @@ import {
   signOutUser,
   SignInWithGoogle,
 } from "./auth";
-import { AddNewPlaylist,getPlaylist, getPlaylistById } from "./playlist";
+import { AddNewPlaylist,addSongToPlaylist,getPlaylist, getPlaylistById, removeSongFromPlaylist } from "./playlist";
 
 export const authActions = {
   SignIn,
@@ -18,5 +19,14 @@ export const authActions = {
 export const playlistActions = {
   AddNewPlaylist,
   getPlaylist,
-  getPlaylistById
+  getPlaylistById,
+  addSongToPlaylist,
+  removeSongFromPlaylist
+};
+
+export const adminActions = {
+  fetchAdmins,
+  fetchDashboard,
+  createAdminUser,
+  deleteAdminUser
 };

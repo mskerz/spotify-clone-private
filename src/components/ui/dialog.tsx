@@ -15,7 +15,7 @@ function Dialog({
 function DialogTrigger({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
-  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+  return <DialogPrimitive.Trigger onClick={(e) => e.stopPropagation()} data-slot="dialog-trigger" {...props} />
 }
 
 function DialogPortal({
@@ -80,6 +80,16 @@ function DialogContent({
   )
 }
 
+function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn("flex flex-col gap-3", className)}
+      {...props}
+    />
+  )
+}
+
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -110,7 +120,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg leading-none font-semibold", className)}
+      className={cn("text-lg leading-none", className)}
       {...props}
     />
   )
@@ -136,6 +146,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogBody,
   DialogOverlay,
   DialogPortal,
   DialogTitle,

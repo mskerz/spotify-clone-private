@@ -22,13 +22,7 @@ function PlayListPage({ userPlaylists }: { userPlaylists: Playlist[] }) {
   const { dispatch } = useRedux();
   const [{ display }, setDisplay] = useState<ItemDisplayType>({ display: ItemDisplay.COLUMN });
   const [sort, setSort] = useState<SortType>(SortType.ASC);
-  const {auth} = useAuth();
 
-  useEffect(() => {
-     if(auth.isLoggedIn){
-      dispatch(playlistActions.getPlaylist());
-     }
-  }, [dispatch, userPlaylists , auth]);
 
   const handleSort = () => {
     if (sort === SortType.ASC) {

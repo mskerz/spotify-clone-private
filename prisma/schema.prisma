@@ -42,7 +42,7 @@ model UserInfo {
   phoneNumber  String?
   birthday     DateTime?
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
 }
 
 model Song {
@@ -71,4 +71,4 @@ model Playlist {
   songs Song[] @relation("PlaylistSongs")
 }
 
-// npx prisma migrate dev --name add_cover_image_playlist_columns
+// npx prisma migrate dev --name add_on_delete_cascade_to_userinfo_userid

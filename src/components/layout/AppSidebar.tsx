@@ -17,15 +17,16 @@ import { Home, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { FaSpotify } from "react-icons/fa";
-import { MdLibraryBooks as Collection } from "react-icons/md";
+import { MdLibraryBooks as Collection, MdDashboard } from "react-icons/md";
 
 // Menu items.
 
 export function AppSidebar() {
-  const { auth } = useAuth();
-  const { isLoggedIn } = auth;
-  const menuItems = customMenuItems(
-    isLoggedIn
+  const { isLoggedIn, user } = useAuth().auth;
+  const isAdmin = user?.role === "ADMIN" || user?.role === "SUPER_ADMIN";
+
+  const menuItems = customMenuItems([
+    ...(isLoggedIn
       ? [
           {
             title: "My Collection",
@@ -33,8 +34,17 @@ export function AppSidebar() {
             icon: Collection,
           },
         ]
-      : [],
-  );
+      : []),
+    ...(isAdmin
+      ? [
+          {
+            title: "Admin Dashboard",
+            url: "/admin/dashboard",
+            icon: MdDashboard,
+          },
+        ]
+      : []),
+  ]);
   return (
     <Sidebar>
       <SidebarHeader className="my-2.5 mb-4 flex flex-row items-center gap-4 text-xl font-semibold tracking-wide">

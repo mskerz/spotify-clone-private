@@ -80,7 +80,7 @@ export const checkUserSession = createAsyncThunk<
     );
     if (!user) return null;
 
-    const idToken = await user.getIdToken();
+    const idToken = await user.getIdToken(true);
     const res = await api.get(AUTH_API.SYNC, {
       headers: {
         Authorization: `Bearer ${idToken}`,
@@ -116,12 +116,14 @@ export const SignInWithGoogle = createAsyncThunk<
     const result = await signInWithPopup(auth, googleProvider);
     const idToken = await result.user.getIdToken();
     localStorage.setItem("idToken", idToken);
-    const res = await api.get(AUTH_API.SYNC);
-    const data = await res.data();
-    return data.user;
+    const res =  await api.get(AUTH_API.SYNC);
+    return res.data.user;
   } catch (error) {
     if (error instanceof Error) {
       return rejectWithValue(error.message);
     }
   }
 });
+
+
+export const checkTokenExpired =  createAsyncThunk 

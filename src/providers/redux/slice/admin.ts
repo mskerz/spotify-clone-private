@@ -7,16 +7,19 @@ import {
   deleteAdminUser,
   fetchAdmins,
   fetchDashboard,
+  resetPasswordAdminUser,
 } from "./action/admin";
 
 const initialState: AdminState = {
   dashboard: {
     totalUsers: 0,
     totalSongs: 0,
+    totalCategories: 0,
     userGrowth: 0,
   },
   admin_users: [],
   loading: false,
+  message:"",
   status: "loading",
   error: null,
 };
@@ -79,15 +82,32 @@ const adminSlice = createSlice({
       .addCase(deleteAdminUser.fulfilled, (state, action) => {
         state.loading = false;
         state.status = "succeeded";
-        state.admin_users = state.admin_users.filter(
-          (user) => user.id !== action.payload,
-        );
+        state.admin_users = state.admin_users
+          .filter((user) => user.id !== action.payload) // ลบ user
+          .map((user, index) => ({ ...user, index: index + 1 })); // จัด index ใหม่
       })
       .addCase(deleteAdminUser.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
         state.error = action.payload ?? "Failed to delete admin user";
-      });
+      })
+
+      // reset change password admin
+      .addCase(resetPasswordAdminUser.pending, (state) => {
+        state.loading = true;
+        state.status = "loading";
+      })
+      .addCase(resetPasswordAdminUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.message = action.payload
+      })
+      .addCase(resetPasswordAdminUser.rejected, (state, action) => {
+        state.loading = false;
+        state.status = "failed";
+        state.error = action.payload ?? "Failed to reset password admin user";
+      })
+      
   },
 });
 

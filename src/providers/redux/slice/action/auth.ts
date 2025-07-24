@@ -24,7 +24,7 @@ export const SignUp = createAsyncThunk<
       formData.password,
     );
 
-    await api.post(AUTH_API.SYNC, {
+    await api.post(AUTH_API.REGISTER, {
         firebase_uid: userCredential.user.uid,
         email: formData.email,
         firstName: formData.firstName,
@@ -35,11 +35,12 @@ export const SignUp = createAsyncThunk<
       })
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message.includes("email-already-in-use")) {
+      if (error.message.includes("auth/email-already-in-use")) {
         return rejectWithValue("Email already in use");
       }
+      return rejectWithValue(error.message);
     }
-    return rejectWithValue("Invalid email or password");
+    return rejectWithValue(  "Unknown error");
   }
 });
 

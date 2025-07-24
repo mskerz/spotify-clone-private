@@ -10,6 +10,7 @@ export const avartar = [
 
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+export const CLIENT_URL = process.env.CLIENT_URL;
 
 export class AUTH_API {
   public static BASE_URL = "/auth";
@@ -19,6 +20,9 @@ export class AUTH_API {
 
   // 📝 /auth/register
   public static REGISTER = `${AUTH_API.BASE_URL}/register`;
+
+  // 📝 /auth/forgot-password
+  public static FORGOT_PASSWORD = `${AUTH_API.BASE_URL}/request-forget-password`;
 
   // 📁 /auth/playlist
   public static PLAYLIST_BASE_URL = `${AUTH_API.BASE_URL}/playlist`;
@@ -53,11 +57,11 @@ export class ADMIN_API {
 
   public static ADMIN_USERS_CREATE =  `${this.ADMIN_USERS}/create`;  // POST
 
-  public static ADMIN_USERS_EDIT =  `${this.ADMIN_USERS}/edit`;  // PUT
+  public static ADMIN_USERS_RESET_PASSWORD =  `${this.ADMIN_USERS}/reset-password`;  // PUT
 
   public static ADMIN_USERS_DELETE =  `${this.ADMIN_USERS}/delete`;  // DELETE
 
 }
 
-export const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "";
+ export const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "";
 export const ADMIN_USER_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "";

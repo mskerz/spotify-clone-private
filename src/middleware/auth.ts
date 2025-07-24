@@ -1,8 +1,9 @@
 import { UserWithInfo } from "@/types/user/prisma";
 import { auth } from "../libs/firebase/server";
 import prisma from "@/libs/prisma";
-import { mapFirebaseProvider, randomAvatar } from "@/utils/map";
+import { mapFirebaseProvider } from "@/utils/map";
 import { DecodedIdToken } from "node_modules/firebase-admin/lib/auth/token-verifier";
+import { faker } from "@faker-js/faker";
 
 export async function authMiddeware(req: Request) {
   try {
@@ -42,7 +43,7 @@ export async function getUser(DecodeUser: DecodedIdToken) {
             create: {
               firstName: DecodeUser.name?.split(" ")[0] || "",
               lastName: DecodeUser.name?.split(" ").slice(1).join(" ") || "",
-              avatarUrl: DecodeUser.picture || randomAvatar(),
+              avatarUrl: DecodeUser.picture || faker.image.avatar(),
               phoneNumber: "N/A",
               age: 18, // Provide a default age or extract from decodeUser if available
             },

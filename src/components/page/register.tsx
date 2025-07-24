@@ -41,13 +41,15 @@ function RegisterPage() {
     handleSubmit,
     setValue,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormRegisterType>({
     resolver: zodResolver(validationFormRegister),
     mode: "onChange",
+    
   });
-  const { form, setField, resetRegisterForm, isFormEmpty } = useRegisterForm();
-  const { dispatch, useSelector } = useRedux();
+
+  const { dispatch } = useRedux();
   const navigate = useRouter();
   const onSubmit = async (data: FormRegisterType) => {
     toast
@@ -72,18 +74,21 @@ function RegisterPage() {
       .then(() => {
         // success
 
-        resetRegisterForm();
+        reset();
         navigate.replace("/login");
       })
       .catch(() => {});
   };
 
   const randomUserData = () => {
-    setValue("firstName", faker.person.firstName());
-    setValue("lastName", faker.person.lastName());
+
+    const FirstName = faker.person.firstName();
+    const LastName = faker.person.lastName();
+    setValue("firstName",  FirstName);
+    setValue("lastName",  LastName);
     setValue(
       "email",
-      faker.internet.email({ provider: "gmail.com" }).toLowerCase(),
+      faker.internet.email({ firstName: FirstName,lastName: LastName, provider: "gmail.com" }).toLowerCase(),
     );
     setValue("password", "123456");
 
@@ -92,24 +97,12 @@ function RegisterPage() {
     setValue("birthday", birthday);
     setValue("age", calculateAge(birthday));
     setValue("phoneNumber", fakerTH.phone.number({ style: "national" }));
+  }; 
+  
+  const onError = () => {
+    toast.error("Please fill in all required fields.");
   };
-  const onSubmitTest = (data: FormRegisterType) => {
-    toast.custom(() => (
-      <div className="max-w-md w-full bg-accent shadow-md pointer-events-none p-4">
-        <h1>Form submitted</h1>
-        <div>
-          <p>email: {data.email}</p>
-          <p>firstName: {data.firstName}</p>
-          <p>lastName: {data.lastName}</p>
-          <p>age: {data.age}</p>
-          <p>phoneNumber: {data.phoneNumber}</p>
-          <p>birthday: {data.birthday.toISOString()}</p>
-        </div>
 
-        <Button onClick={() => toast.dismiss()}>Close</Button>
-      </div>
-    ));
-  };
 
   return (
     <div className="flex items-center justify-center">
@@ -121,7 +114,7 @@ function RegisterPage() {
           </CardHeader>
           <CardContent>
             <form
-              onSubmit={handleSubmit(onSubmitTest)}
+              onSubmit={handleSubmit(onSubmit, onError)}
               className="flex w-full flex-col items-center"
             >
               <div className="mb-4 w-full">
@@ -239,12 +232,12 @@ function RegisterPage() {
                   )}
                 />
               </div>
-              <button
+              <Button
                 type="submit"
                 className="mt-2 w-full cursor-pointer rounded-3xl bg-[#1ed760] px-4 py-2 text-white shadow transition hover:bg-[#1fdf64]"
               >
                 Register
-              </button>
+              </Button>
             </form>
           </CardContent>
         </Card>

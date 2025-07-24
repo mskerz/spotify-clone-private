@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 
-export function useOpenControl(initialOpen = false) {
+import OpenControl from "@/types/state/control";
+
+export function useOpenControl(initialOpen = false): OpenControl {
   const [isOpen, setIsOpen] = useState(initialOpen);
 
   const open = useCallback(() => setIsOpen(true), []);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,20 +28,25 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useOpenControl } from "@/hooks/control";
 import { useRedux } from "@/hooks/redux";
 import { adminActions } from "@/providers/redux/slice/action";
 import { AdminUser } from "@/types/user";
-import { AdminFormInput, validationFormAdmin } from "@/validation/admin";
+import {
+  AdminFormInput,
+  AdminResetPassword,
+  validationFormAdmin,
+  validationFormAdminResetPassword,
+} from "@/validation/admin";
 
 import { DialogCancel } from "../AddSongToPlaylist";
-import { useOpenControl } from "@/hooks/control";
 
 type Props = {
-  editAdmin: AdminUser;
+  admin: AdminUser;
 };
 
-function EditAdminDialog({ editAdmin }: Props) {
-const { isOpen, open, close,setIsOpen } = useOpenControl();
+function ChangePasswordDialog({ admin }: Props) {
+  const { isOpen, open, close, setIsOpen } = useOpenControl();
 
   const {
     register,
@@ -48,131 +54,84 @@ const { isOpen, open, close,setIsOpen } = useOpenControl();
     setValue,
     reset,
     formState: { errors },
-  } = useForm<AdminFormInput>({
-    resolver: zodResolver(validationFormAdmin),
+  } = useForm<AdminResetPassword>({
+    resolver: zodResolver(validationFormAdminResetPassword),
     mode: "onChange",
     defaultValues: {
-      firstName: editAdmin.id || "",
-      lastName: editAdmin.detail.lastName || "",
-      password: "123456",
+      id: admin.id,
     },
   });
 
   const { dispatch } = useRedux();
 
-  const onSubmit = async (data: AdminFormInput) => {
-    // Handle form submission logic here
-    if (!data) return;
+  const onSubmit = (data: AdminResetPassword) => {
+  
 
-    try {
-      // ทำงานที่ต้องการ เช่น API call
-      console.log("Updating admin:", data);
 
-      // หลังจากสำเร็จแล้วค่อยปิด dialog และ reset form
-      reset();
-      close();
-    } catch (error) {
-      console.error("Error updating admin:", error);
-      // อาจจะแสดง error message
-    }
+    dispatch(adminActions.resetPasswordAdminUser(data))
+      .unwrap()
+      .then(() => {
+        toast.success("Password reset successfully.");
+        reset(); // reset form เมื่อสำเร็จ
+        close();
+      })
+      .catch((error) => {
+        toast.error(error || "Something went wrong.");
+      });
   };
-
-  const randomName = () => {
-    // implement random name generation with faker.js
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-
-    setValue("firstName", firstName);
-    setValue("lastName", lastName);
-    setValue(
-      "email",
-      "admin_" +
-        faker.internet
-          .email({ firstName: firstName, lastName: lastName })
-          .toLowerCase(),
-    );
+    const onError = () => {
+    toast.error("Please fill in all required fields.");
   };
 
   const handleDialogClose = () => {
-    close();
     reset();
-    
+    close();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger className="flex items-center gap-2">
-        <Edit2Icon />
-        <span>Edit</span>
+      <DialogTrigger className="flex items-center gap-2"  >
+            <Edit2Icon />
+          <span>Change Password </span>
       </DialogTrigger>
 
-      <DialogContent
-        showCloseButton={false}
-        onPointerDownOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent showCloseButton={false} onPointerDownOutside={(e) => e.preventDefault()}>
         <DialogHeader className="flex flex-col ">
-          <DialogTitle>Edit Admin</DialogTitle>
+          <DialogTitle>Reset Password Admin</DialogTitle>
 
           <DialogDescription>
-            Update information for this administrator.
+            Reset password for this administrator.
           </DialogDescription>
         </DialogHeader>
         <DialogBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <div className="flex items-center">
               <div className="mb-4">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
                   type="text"
+                  readOnly
                   placeholder="Enter admin first name"
-                  className="mt-1"
-                  {...register("firstName")}
+                  className="mt-1 cursor-not-allowed bg-accent/50"
+                  disabled
+                  value={admin.detail.firstName}
                 />
-                {errors.firstName && (
-                  <p className="text-red-500">{errors.firstName.message}</p>
-                )}
               </div>
               <div className="mb-4 ml-4">
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
                   type="text"
+                  readOnly
                   placeholder="Enter admin last name"
-                  className="mt-1"
-                  {...register("lastName")}
+                  className="mt-1 cursor-not-allowed bg-accent/50"
+                  disabled
+                  value={admin.detail.lastName}
                 />
-                {errors.lastName && (
-                  <p className="text-red-500">{errors.lastName.message}</p>
-                )}
               </div>
+            </div>
 
-              <Tooltip>
-                <TooltipTrigger
-                  className="ml-4 cursor-pointer"
-                  type="button"
-                  onClick={randomName}
-                >
-                  <Shuffle className="h-5 w-5 text-gray-500 hover:text-green-500" />
-                </TooltipTrigger>
-                <TooltipContent>Generate random names</TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="mb-4">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter admin email"
-                className="mt-1"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
-            </div>
             <div className="mb-4">
               <Label htmlFor="password">Password</Label>
               <PasswordInput
@@ -183,6 +142,16 @@ const { isOpen, open, close,setIsOpen } = useOpenControl();
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
+            <div className="mb-4">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <PasswordInput
+                placeholder="Enter admin password"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500">{errors.confirmPassword.message}</p>
+              )}
+            </div>
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
@@ -191,7 +160,7 @@ const { isOpen, open, close,setIsOpen } = useOpenControl();
               >
                 Cancel
               </Button>
-              <Button type="submit" className="button-spotify">
+              <Button type="submit" className="button-spotify cursor-pointer">
                 Update
               </Button>
             </div>
@@ -202,24 +171,23 @@ const { isOpen, open, close,setIsOpen } = useOpenControl();
   );
 }
 
-export default EditAdminDialog;
-
+export default ChangePasswordDialog;
 
 /**
  * ✅ Today Task - 20/07/2025
- * 
+ *
  * 🛠 Features:
  * - Add action menu (Update/Delete) to Admin UI in DataTable
  * - Add Confirm Dialog for global actions (support both with and without parameters)
  * - Dispatch action to delete admin from Redux with admin ID
- * 
+ *
  * 🔁 Refactors:
  * - Separate admin hook into general admin and super admin
- * 
+ *
  * 🐞 Bug Fixes:
  * - Fix event propagation issue in Dialog
  * - Fix admin deletion bug: wrong field (`firebaseUid` instead of `id`) used in `where` clause
- * 
+ *
  * 🧱 Database:
  * - Add foreign key constraint (ON DELETE CASCADE) to `user` table
  */

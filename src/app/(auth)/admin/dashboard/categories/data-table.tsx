@@ -25,8 +25,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { AddNewAdminDialog } from "@/components/dialog/super-admin";
-import { useSuperAdmin } from "@/hooks/auth/admin";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,7 +37,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const {loading} =useSuperAdmin();
 
   const table = useReactTable({
     data,
@@ -58,17 +55,19 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by Email or Full Name..."
+          placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => {
-            table.getColumn("name")?.setFilterValue(event.target.value);
-            table.getColumn("email")?.setFilterValue(event.target.value);
-          }}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
-        <AddNewAdminDialog />
+        <Link href="/admin/song/new" className="ms-auto flex items-center gap-2 rounded-md outline-2  outline-gray-200 hover:outline-green-400 px-4 py-2 shadow transition-colors duration-200 transform  ">
+          <PlusIcon />
+          <span>New</span>
+        </Link>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -77,7 +76,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="px-4" key={header.id}>
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -91,13 +90,7 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Loading...
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -119,7 +112,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results for Admin Users.
+                  No results.
                 </TableCell>
               </TableRow>
             )}

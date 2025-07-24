@@ -2,7 +2,7 @@
 
 
 // libs/axios.ts
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { auth } from "@/libs/firebase/client";
 import { BASE_URL } from "@/constant";
 
@@ -26,7 +26,12 @@ api.interceptors.request.use(async (config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error ) => {
+   if (error.response?.data?.message) {
+      return Promise.reject(new Error(error.response.data.message));
+    }
+    return Promise.reject(error);
+  }
 );
 
 

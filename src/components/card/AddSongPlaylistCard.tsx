@@ -48,6 +48,7 @@ function AddSongPlaylistCard({ playlist, onClick, isChecked = false }: Props) {
           id={`playlist-item-${playlist.id}`}
           value={playlist.id}
           checked={isChecked}
+
         />
       </CardContent>
     </Card>

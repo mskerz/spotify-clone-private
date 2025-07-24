@@ -7,6 +7,8 @@ type MappedUserResponse = {
   email: string;
   role: string; // หรือถ้าใช้ enum Role จาก Prisma ก็: Role
   provider: string; // หรือถ้าใช้ enum AuthProvider จาก Prisma ก็: AuthProvider
+  createdAt: Date;
+  updatedAt: Date;
   detail: {
     firstName: string | null;
     lastName: string | null;
@@ -18,7 +20,7 @@ type MappedUserResponse = {
 };
 
 type MappedAdminResponse = {
-  index: number;
+  index?: number;
   id: string;
   email: string;
   createdAt: Date;
@@ -65,6 +67,8 @@ function mapAdminResponse(
   };
 }
 
+
+
 function mapUserResponse(user: UserWithInfo): MappedUserResponse {
   if (!user.userInfo) {
     throw new Error("User info not found");
@@ -74,6 +78,8 @@ function mapUserResponse(user: UserWithInfo): MappedUserResponse {
     email: user.email,
     role: user.role,
     provider: user.provider,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
     detail: {
       firstName: user.userInfo.firstName,
       lastName: user.userInfo.lastName,
@@ -85,9 +91,27 @@ function mapUserResponse(user: UserWithInfo): MappedUserResponse {
   };
 }
 
-function randomAvatar() {
-  return avartar[Math.floor(Math.random() * avartar.length)];
+function mapAdminResponseOne(user: UserWithInfo): MappedAdminResponse {
+  if (!user.userInfo) {
+    throw new Error("User info not found");
+  }
+  return {
+    id: user.id,
+    email: user.email,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    detail: {
+      firstName: user.userInfo.firstName,
+      lastName: user.userInfo.lastName,
+      age: user.userInfo.age,
+      phoneNumnber: user.userInfo.phoneNumber,
+      birthday: user.userInfo.birthday,
+      avatarUrl: user.userInfo.avatarUrl,
+    },
+  };
 }
 
+ 
+
 // เอาไว้แค่นี้ก่อน
-export { mapFirebaseProvider, mapUserResponse , mapAdminResponse, randomAvatar };
+export { mapFirebaseProvider, mapUserResponse , mapAdminResponse, mapAdminResponseOne };

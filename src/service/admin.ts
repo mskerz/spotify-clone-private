@@ -31,9 +31,12 @@ export async function getAdminDashboard() {
 
   const totalSongs = await prisma.song.count();
 
+  const totalCategories = await prisma.category.count();
+
   return {
     totalUsers,
     totalSongs,
+    totalCategories,
     userGrowth: userGrowth !== null ? parseFloat(userGrowth.toFixed(2)) : 0.0,
   };
 }

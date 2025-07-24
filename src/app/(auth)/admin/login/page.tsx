@@ -44,14 +44,22 @@ function AdminLoginPage() {
       return;
     }
 
-    try {
-       dispatch(authActions.SignIn(data)).unwrap();
-      toast.success("Login successful!");
-      router.replace("/admin/dashboard");
-    } catch (error) {
-      toast.error("Login failed. Please try again.");
-    }
+    dispatch(authActions.SignIn(data))
+      .unwrap()
+      .then(() => {
+        toast.success("Login successful!");
+        router.replace("/admin/dashboard");
+      })
+      .catch((error) => {
+        toast.error(error || "Login failed. Please try again.");
+      });
   };
+
+
+  const onError = () => {
+    toast.error("Please fill in all required fields.");
+  };
+
 
   return (
     <div className="flex h-screen w-full items-center justify-center">
@@ -61,7 +69,7 @@ function AdminLoginPage() {
           <CardDescription>Please login with your admin account</CardDescription>
         </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit , onError)}>
           <CardContent className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>

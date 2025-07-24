@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVertical, Trash } from "lucide-react";
 
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
-import EditAdminDialog from "@/components/dialog/super-admin/EditAdminDIalog";
+import EditAdminDialog from "@/components/dialog/super-admin/ChangePasswordDialog";
 import DropdownAdminActionCell from "@/components/dropdown/super-admin/action-cell";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +89,7 @@ export const columns: ColumnDef<AdminUser>[] = [
 
   {
     id: "actions",
-
+    header: "Manage",
     cell: ({ row }) => {
       return <DropdownAdminActionCell admin={row.original} />;
     },

@@ -1,32 +1,37 @@
 "use client";
 
+import { useEffect } from "react";
+
+import Link from "next/link";
+
+import { ArrowDown, Music, User } from "lucide-react";
+
+import withAdminGuard from "@/components/guard/withAdminGuard";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {useRegularAdmin} from "@/hooks/auth/admin";
-import { User, Music, ArrowDown } from "lucide-react";
-import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/auth";
-import Link from "next/link";
-import withAdminGuard from "@/components/guard/withAdminGuard";
+import { useRegularAdmin } from "@/hooks/auth/admin";
+import { BiCategory } from "react-icons/bi";
 
 function Page() {
   const { dashboard, fetchDashboardData } = useRegularAdmin();
-  const {user, loading} = useAuth().auth;
+  const { user, loading } = useAuth().auth;
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
   return (
     <div className="space-y-6 p-6">
-      
-      <h1 className="text-3xl font-bold">{user?.role === "SUPER_ADMIN" ? "Super Admin" : "Admin"} Dashboard</h1>
+      <h1 className="text-3xl font-bold">
+        {user?.role === "SUPER_ADMIN" ? "Super Admin" : "Admin"} Dashboard
+      </h1>
       <Separator />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -44,7 +49,11 @@ function Page() {
               </>
             ) : (
               <>
-                <div className="text-2xl font-bold">{dashboard.totalUsers}</div>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold">{dashboard.totalUsers}</p>
+
+                  <p className="text-muted-foreground text-xs">Users</p>
+                </div>
                 <p className="text-muted-foreground text-xs">
                   {dashboard.userGrowth > 0 ? (
                     <span className="text-green-400">
@@ -79,10 +88,39 @@ function Page() {
               </>
             ) : (
               <>
-                <div className="text-2xl font-bold">{dashboard.totalSongs}</div>
-                <p className="text-muted-foreground text-xs">
-                  +8.3% from last month
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold">{dashboard.totalSongs}</p>
+
+                  <p className="text-muted-foreground text-xs">Songs</p>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Categories
+            </CardTitle>
+            <BiCategory className="text-muted-foreground h-4 w-4" />
+          </CardHeader>
+          <CardContent className="space-y-1.5">
+            {dashboard.totalSongs === 0 ? (
+              <>
+                {" "}
+                <Skeleton className="h-8 w-8" />
+                <Skeleton className="mt-1 h-4 w-36" />
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold">
+                    {dashboard.totalCategories}
+                  </p>
+
+                  <p className="text-muted-foreground text-xs">Categories</p>
+                </div>
               </>
             )}
           </CardContent>
@@ -100,23 +138,22 @@ function Page() {
                 <Link href="/admin/dashboard/users">View admin users</Link>
               </CardDescription>
             </CardHeader>
-            
           </Card>
         )}
         <Card className="flex-1">
           <CardHeader>
             <CardTitle>Songs</CardTitle>
             <CardDescription className="text-sm text-muted-foreground hover:text-primary transition-all">
-                <Link href="/admin/dashboard/songs">View songs</Link>
-              </CardDescription>
+              <Link href="/admin/dashboard/songs">View songs</Link>
+            </CardDescription>
           </CardHeader>
         </Card>
         <Card className="flex-1">
           <CardHeader>
             <CardTitle>Categories</CardTitle>
             <CardDescription className="text-sm text-muted-foreground hover:text-primary transition-all">
-                <Link href="/admin/dashboard/categories">View categories</Link>
-              </CardDescription>
+              <Link href="/admin/dashboard/categories">View categories</Link>
+            </CardDescription>
           </CardHeader>
         </Card>
       </div>

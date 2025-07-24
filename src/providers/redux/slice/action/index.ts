@@ -1,4 +1,4 @@
-import { createAdminUser, deleteAdminUser, fetchAdmins, fetchDashboard } from "./admin";
+import { createAdminUser, deleteAdminUser, fetchAdmins, fetchDashboard, resetPasswordAdminUser } from "./admin";
 import {
   SignIn,
   SignUp,
@@ -28,5 +28,6 @@ export const adminActions = {
   fetchAdmins,
   fetchDashboard,
   createAdminUser,
-  deleteAdminUser
+  deleteAdminUser,
+  resetPasswordAdminUser
 };

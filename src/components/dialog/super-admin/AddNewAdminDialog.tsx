@@ -1,6 +1,7 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { faker } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,19 +25,21 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useOpenControl } from "@/hooks/control";
 import { useRedux } from "@/hooks/redux";
+import { adminActions } from "@/providers/redux/slice/action";
 import { AdminFormInput, validationFormAdmin } from "@/validation/admin";
 
 import { DialogCancel } from "../AddSongToPlaylist";
-import { adminActions } from "@/providers/redux/slice/action";
 
 function AddNewAdminDialog() {
+  const { isOpen, setIsOpen, close, open } = useOpenControl();
   const {
     register,
     handleSubmit,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<AdminFormInput>({
     resolver: zodResolver(validationFormAdmin),
     mode: "onChange",
@@ -45,18 +48,25 @@ function AddNewAdminDialog() {
       lastName: "John",
       password: "123456",
     },
-  }); 
-  
+  });
 
   const { dispatch } = useRedux();
 
   const onSubmit = (data: AdminFormInput) => {
-    // Handle form submission logic here
+    dispatch(adminActions.createAdminUser(data))
+      .unwrap()
+      .then(() => {
+        toast.success("Admin added successfully.");
+        reset(); // reset form เมื่อสำเร็จ
+        close();
+      })
+      .catch((error) => {
+        toast.error(error || "Something went wrong.");
+      });
+  };
 
-    if (!data) return;
-    // alert(JSON.stringify(data));
-    dispatch(adminActions.createAdminUser(data));
-    reset();
+  const onError = () => {
+    toast.error("Please fill in all required fields.");
   };
 
   const randomName = () => {
@@ -73,24 +83,22 @@ function AddNewAdminDialog() {
     );
   };
   return (
-    <Dialog  >
-      <DialogTrigger className="ms-auto flex transform items-center gap-2 rounded-md px-2 py-2 shadow outline-2 outline-gray-200 transition-all duration-200 hover:text-green-400 hover:outline-green-400">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger
+        onClick={open}
+        className="ms-auto flex transform items-center gap-2 rounded-md px-2 py-2 shadow outline-2 outline-gray-200 transition-all duration-200 hover:text-green-400 hover:outline-green-400"
+      >
         <UserRoundPlus className="" />
         <span>New</span>
       </DialogTrigger>
 
-      <DialogContent
-        showCloseButton={false}
-        onPointerDownOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent showCloseButton={false}>
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle> New Admin</DialogTitle>
           <DialogCancel onClick={() => reset()} />
         </DialogHeader>
         <DialogBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <div className="flex items-center">
               <div className="mb-4">
                 <Label htmlFor="name">First Name</Label>
@@ -151,11 +159,9 @@ function AddNewAdminDialog() {
               )}
             </div>
             <div className="flex justify-end">
-              <DialogClose asChild>
-                <Button type="submit" className="button-spotify">
-                  Create
-                </Button>
-              </DialogClose>
+              <Button type="submit" className="button-spotify">
+                Create
+              </Button>
             </div>
           </form>
         </DialogBody>

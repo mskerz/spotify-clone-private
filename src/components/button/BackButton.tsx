@@ -3,11 +3,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
 
-function BackButton() {
+function BackButton( {backToHome = false} : {backToHome?: boolean}) {
   const navigate = useRouter();
   return (
     <Button
-      onClick={() => navigate.back()}
+      onClick={() => backToHome ? navigate.push("/") : navigate.back()}
       className="hover:bg-accent rounded-full bg-transparent"
     >
       <ChevronLeft className="text-foreground" />

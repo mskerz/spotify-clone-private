@@ -31,11 +31,14 @@ export async function POST(request: Request) {
         },
       );
     }
+
     // 1. สร้าง User ที่ Firebase Auth
     const firebaseUser = await auth.createUser({
       email,
       password,
     });
+
+    
     const avartarRandom = fakerTH.image.avatar();
     const randomPhone = fakerTH.phone.number({ style: "national" });
     const randomBirthday = fakerTH.date.birthdate();
@@ -81,12 +84,15 @@ export async function POST(request: Request) {
       },
     );
   } catch (error) {
-    if (error instanceof Error) {
-      return new Response(JSON.stringify({ message: error.message }), {
-        status: 500,
-      });
+    
+    if(error instanceof Error) {
+      return new Response(
+        JSON.stringify({ message: error.message }),
+        {
+          status: 500,
+        },
+      );
     }
-
     return new Response(
       JSON.stringify({ message: "Error creating user Admin" }),
       {

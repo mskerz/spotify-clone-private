@@ -12,12 +12,13 @@ export async function GET(req: Request) {
       );
     }
 
-    const { totalUsers, totalSongs, userGrowth } = await getAdminDashboard();
+    const { totalUsers, totalSongs, userGrowth,totalCategories } = await getAdminDashboard();
 
     return new Response(
       JSON.stringify({
         totalUsers,
         totalSongs,
+        totalCategories,
         userGrowth:
           userGrowth !== null ? parseFloat(userGrowth.toFixed(2)) : 0.0,
       }),

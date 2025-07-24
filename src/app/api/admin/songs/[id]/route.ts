@@ -2,14 +2,13 @@ import prisma from "@/libs/prisma";
 import { adminMiddleware } from "@/middleware/auth";
 
 type SongParams = {
-  req: Request;
   params: {
     id: string;
   };
-};
+}; 
 
 //  route  : /api/admin/songs/:id ->  PUT  : Update song
-export async function PUT({ req, params }: SongParams) {
+export async function PUT( req: Request,{  params }: SongParams) {
   try {
     const isAdmin = await adminMiddleware(req);
 
@@ -45,7 +44,7 @@ export async function PUT({ req, params }: SongParams) {
 
 
 //  route  : /api/admin/songs/:id ->  DELETE  : Delete song
-export async function DELELTE({ req, params }: SongParams) {
+export async function DELELTE(req: Request, { params }: SongParams) {
     try {
         const isAdmin = await adminMiddleware(req);
 

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import { MoreVertical, Trash } from "lucide-react";
 
 import ConfirmDialog from "@/components/dialog/ConfirmDialog";
-import EditAdminDialog from "@/components/dialog/super-admin/EditAdminDIalog";
+import ChangePasswordDialog from "@/components/dialog/super-admin/ChangePasswordDialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,25 +21,27 @@ type Props = {
   admin: AdminUser;
 };
 function DropdownAdminActionCell({ admin }: Props) {
-      const { deleteAdmin } = useSuperAdmin();
+  const { deleteAdmin } = useSuperAdmin();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-       <DropdownMenu>
+   <>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
           <MoreVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <EditAdminDialog editAdmin={admin} />
+        <DropdownMenuItem onSelect={(e)=> e.preventDefault()}>
+          <ChangePasswordDialog admin={admin} />
         </DropdownMenuItem>
         <DropdownMenuItem>
           <ConfirmDialog
             id={admin.id}
             title="Are you sure?"
             description="Are you sure you want to delete this admin?"
-           onClickWithParam={(id) => deleteAdmin(String(id))}
+            onClickWithParam={(id) => deleteAdmin(String(id))}
           >
             <div className="flex items-center">
               <Trash className="mr-2 h-4 w-4" />
@@ -47,6 +51,8 @@ function DropdownAdminActionCell({ admin }: Props) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    
+   </>
   );
 }
 export default DropdownAdminActionCell;

@@ -16,7 +16,6 @@ function Page() {
     <>
        {/* Additional content can be added here */}
             <div className="container mx-auto py-10">
-              {error && <p>{error}</p>}
               <DataTable columns={columns} data={admin_users} />
             </div>
     </>

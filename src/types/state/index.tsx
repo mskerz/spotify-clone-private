@@ -31,6 +31,7 @@ type AdminState = {
   dashboard : Dashbooard
   admin_users: AdminUser[]
   loading: boolean;
+  message: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 };

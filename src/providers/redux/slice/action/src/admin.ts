@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { ADMIN_API } from "@/constant";
-import api from "@/lib/api";
+import { ADMIN_API } from "@/constant/api";
+import api from "@/libs/axios";
 import { getAdmins } from "@/libs/api/admin";
 import { Dashbooard } from "@/types/dashboard";
 import { AdminUser } from "@/types/user";

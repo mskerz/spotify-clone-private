@@ -1,6 +1,6 @@
 import { fakerTH } from "@faker-js/faker";
 
-import { avartar } from "@/constant";
+import { avartar } from "@/constant/api";
 import { auth } from "@/libs/firebase/server";
 import prisma from "@/libs/prisma";
 import { superAdminMiddleware } from "@/middleware/auth";

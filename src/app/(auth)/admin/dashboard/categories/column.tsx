@@ -11,8 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Category from "@/types/category";
+import CategoryActionDropdown from "@/components/dropdown/general-admin/action/category";
 
-export const columns: ColumnDef<Category>[] = [
+const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -38,36 +39,39 @@ export const columns: ColumnDef<Category>[] = [
     ),
   },
   {
-    header:"Created At",
-    cell:()=>{
-        const defaultDate = new Date();
-        const date = new Date(defaultDate);
-        return date.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "2-digit",
-          minute: "2-digit",
-          hour: "2-digit",
-        });
-    }
+    header: "Last Created",
+    accessorKey: "createdAt",
+    cell: ({ row }) => {
+      const formatDate = new Date(row.original.createdAt ? row.original.createdAt : "2025-06-20").toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      return <span className="text-gray-400 italic"> {formatDate}</span>;
+    },
+  },
+
+  {
+    header: "Last Updated",
+    accessorKey: "updatedAt",
+    cell: ({ row }) => {
+      const formatDate = new Date(row.original.updatedAt ? row.original.updatedAt :  row.original.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      return <span className="text-gray-400 italic"> {formatDate ? formatDate : "-"}</span>;
+    },
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
     cell: ({ row }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <CategoryActionDropdown row={row.original} />
       );
     },
   },
 ];
+
+export default columns;

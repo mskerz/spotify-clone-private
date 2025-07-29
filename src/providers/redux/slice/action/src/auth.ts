@@ -9,8 +9,8 @@ import {
 } from "firebase/auth";
 import { User } from "@/types/user";
 import { FormLoginType, FormRegisterType } from "@/types/form";
-import api from "@/lib/api";
-import { AUTH_API } from "@/constant";
+import api from "@/libs/axios";
+import { AUTH_API } from "@/constant/api";
 
 export const SignUp = createAsyncThunk<
   void,

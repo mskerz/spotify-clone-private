@@ -1,7 +1,7 @@
 
 "use client";
 
-import { checkUserSession } from "@/providers/redux/slice/action/auth";
+import { checkUserSession } from "@/providers/redux/slice/action/src/auth";
 import { AppDispatch } from "@/providers/redux/store";
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";

@@ -1,33 +1,36 @@
 "use client";
 
+import { useState } from "react";
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Category from "@/types/category";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 type CategoriesDropdownProps = {
   categories: Category[];
+  selectedId?: number;
   onChange: (selectedCategoryId: number) => void;
 };
 
-function CategoriesDropdown({ categories, onChange }: CategoriesDropdownProps) {
+function CategoriesDropdown({ categories, selectedId, onChange }: CategoriesDropdownProps) {
   const handleCategoryChange = (value: string) => {
     const selectedCategoryId = parseInt(value);
     onChange(selectedCategoryId);
   };
 
   return (
-    <Select onValueChange={handleCategoryChange}>
+    <Select
+      value= {selectedId?.toString()}
+      onValueChange={(value) => handleCategoryChange(value)}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a category" />
       </SelectTrigger>
-      <SelectContent >
+      <SelectContent>
         {categories.map((category) => (
-          <SelectItem key={category.id} value={category.id.toString()}>
+          <SelectItem
+            key={category.id}
+            value={category.id.toString()}
+          >
             {category.name}
           </SelectItem>
         ))}

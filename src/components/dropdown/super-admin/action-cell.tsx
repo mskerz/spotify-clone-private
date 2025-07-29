@@ -22,7 +22,6 @@ type Props = {
 };
 function DropdownAdminActionCell({ admin }: Props) {
   const { deleteAdmin } = useSuperAdmin();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
    <>

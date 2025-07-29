@@ -46,11 +46,11 @@ export class ADMIN_API {
   public static BASE_URL = "/admin";
   //  /admin/dashboard
   public static DASHBOARD = `${ADMIN_API.BASE_URL}/dashboard`; // GET
-  //   /admin/songs
-  public static SONGS = `${ADMIN_API.BASE_URL}/songs`;  // GET , POST
+  //   /admin/dashboard/songs
+  public static SONGS = `${ADMIN_API.DASHBOARD}/songs`;  //   POST , PUT , DELETE
 
-  //   /admin/songs/[id] 
-  public static SONG_BY_ID = (id: string) => `${ADMIN_API.SONGS}/${id}`;     // PUT , DELETE
+  //   /admin/dashboard/categories
+  public static CATEGORIES = `${ADMIN_API.DASHBOARD}/categories`;  // GET
 
   // super admin routes
   public static ADMIN_USERS =  `${this.DASHBOARD}/users`;  // GET

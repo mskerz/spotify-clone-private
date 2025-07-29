@@ -1,29 +1,40 @@
 "use client";
 
-import { setSongs, setLoading } from "@/providers/redux/slice/song";
-import {Song} from "@/types/song";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from "react";
+
+import { useGetSongsQuery } from "@/libs/rtk/song";
+
 import SongList from "./song";
-import { RootState } from "@/providers/redux/store";
-
-type SongProps = {
-  initialSongs: Song[];
-};
-function SongClient({ initialSongs }: SongProps) {
-  const dispatch = useDispatch();
-  const { loading } = useSelector((state: RootState) => state.song);
-
-  useEffect(() => {
-    dispatch(setLoading());
-    dispatch(setSongs(initialSongs));
-  }, [dispatch, initialSongs]);
+import CategoriesListButton from "@/components/button/categories";
+import Category from "@/types/category";
 
 
- 
+
+type SongClientProps = {
+  categories: Category[]
+}
+function SongClient( { categories }: SongClientProps) {
+  const { data: songs, error, isLoading } = useGetSongsQuery();
+  const [filterCategory, setFilterCategory] = useState<string | null>(null);
+
+  const filteredSongs = useMemo(() => {
+    if (filterCategory) {
+      return songs?.filter((song) => song.category.name === filterCategory);
+    }
+    return songs;
+  }, [songs, filterCategory]);
+
+  // Render
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading songs</div>;
+
   return (
     <>
-      <SongList />
+     <CategoriesListButton
+        categories={categories}
+        onCategoryChange={setFilterCategory}
+      />
+      <SongList songs={filteredSongs!} />
     </>
   );
 }

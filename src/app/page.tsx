@@ -1,24 +1,18 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getSongs } from "@/libs/api/song";
-import { getCategory } from "@/libs/api/category";
 import CategoriesListButton from "@/components/button/categories";
 import { SongClient } from "@/components/data/song";
-import { Metadata } from "next";
-import { FaPlus } from "react-icons/fa";
- 
- 
+import { SongClientWrapper } from "@/components/wrapper";
+import { getCategory } from "@/libs/api/category";
+import { useGetSongsQuery } from "@/libs/rtk/song";
 
-export default async function Home() {
-  const songs = await getSongs();
+export default async function HomePage() {
   const categories = await getCategory();
+  // ssr fetch
   return (
     <>
       <div className="flex flex-col space-y-3 ">
         {/* ฟอร์มเพิ่มเพลง */}
-         
-        <CategoriesListButton categories={categories} />
-        <SongClient initialSongs={songs} />
+
+         <SongClient categories={categories} />
       </div>
     </>
   );

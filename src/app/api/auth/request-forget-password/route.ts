@@ -1,7 +1,7 @@
 
 // app/api/request-reset-password/route.ts
 
-import { CLIENT_URL } from "@/constant";
+import { CLIENT_URL } from "@/constant/api";
 import { auth } from "@/libs/firebase/server"; // ใช้ Firebase Admin SDK
 import { NextResponse } from "next/server";
 

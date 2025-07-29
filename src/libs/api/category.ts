@@ -1,6 +1,6 @@
 import Category from "@/types/category";
-import api from "@/lib/api";
-import { BASE_URL } from "@/constant";
+import api from "@/libs/axios";
+import { BASE_URL } from "@/constant/api";
 
  async function getCategory(): Promise<Category[]> {
   try {

@@ -5,7 +5,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 
 type InputProps = React.ComponentPropsWithoutRef<'input'>
 

@@ -1,5 +1,5 @@
-import { ADMIN_API } from "@/constant";
-import api from "@/lib/api";
+import { ADMIN_API } from "@/constant/api";
+import api from "@/libs/axios";
 import { AdminUser } from "@/types/user";
 
 async function getAdmins(): Promise<AdminUser[]> {

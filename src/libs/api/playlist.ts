@@ -1,5 +1,5 @@
-import { AUTH_API } from "@/constant";
-import api from "@/lib/api";
+import { AUTH_API } from "@/constant/api";
+import api from "@/libs/axios";
 import { Playlist } from "@/types/song";
 
 async function getPlayListUser(): Promise<Playlist[]> {

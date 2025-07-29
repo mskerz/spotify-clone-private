@@ -8,7 +8,7 @@ import {
   fetchAdmins,
   fetchDashboard,
   resetPasswordAdminUser,
-} from "./action/admin";
+} from "./action/src/admin";
 
 const initialState: AdminState = {
   dashboard: {

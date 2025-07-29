@@ -6,7 +6,7 @@ import {
   checkUserSession,
   signOutUser,
   SignInWithGoogle,
-} from "./action/auth";
+} from "./action/src/auth";
 import { User } from "@/types/user";
 
 const initialState: AuthState = {

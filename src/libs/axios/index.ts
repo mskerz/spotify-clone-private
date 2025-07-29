@@ -4,7 +4,7 @@
 // libs/axios.ts
 import axios, { AxiosError } from "axios";
 import { auth } from "@/libs/firebase/client";
-import { BASE_URL } from "@/constant";
+import { BASE_URL } from "@/constant/api";
 
 const api =  axios.create({
   baseURL: BASE_URL,

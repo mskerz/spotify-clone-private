@@ -1,5 +1,7 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { id } from "date-fns/locale";
 
 import { useOpenControl } from "@/hooks/control";
@@ -23,19 +25,12 @@ type ConfirmDialogProps = {
   description?: string;
   // onAction แบบไม่รับ parameter
   onClick?: () => void;
-
+  onClose?: () => void;
   // onAction แบบรับ id (และ id ต้องไม่ undefined)
   onClickWithParam?: (id: number | string) => void;
 };
 
-function ConfirmDialog({
-  children,
-  title,
-  description,
-  onClickWithParam,
-  onClick,
-  id,
-}: ConfirmDialogProps) {
+function ConfirmDialog({ children, title, description, onClickWithParam, onClick, onClose, id }: ConfirmDialogProps) {
   const { isOpen, open, close, setIsOpen } = useOpenControl();
 
   const handleAction = () => {
@@ -44,11 +39,21 @@ function ConfirmDialog({
     } else if (onClick) {
       onClick();
     }
+
     setIsOpen(false);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    close();
+    onClose?.(); 
   };
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+    <Dialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
+      <DialogTrigger >{children}</DialogTrigger>
 
       <DialogContent
         showCloseButton={false}
@@ -58,20 +63,21 @@ function ConfirmDialog({
       >
         <DialogHeader>
           <DialogTitle>{title || "Are you sure?"}</DialogTitle>
-          <DialogDescription>
-            {description || "Are you sure you want to do this?"}
-          </DialogDescription>
+          <DialogDescription>{description || "Are you sure you want to do this?"}</DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="flex flex-row items-center justify-evenly">
           <Button
+            onClick={handleClose}
             className="mr-2 bg-neutral-800 hover:bg-neutral-700 dark:bg-white dark:text-black dark:hover:bg-neutral-300 cursor-pointer"
-            onClick={close}
           >
             Cancel
           </Button>
 
-          <DialogClose className="cursor-pointer" onClick={handleAction}>
+          <DialogClose
+            className="cursor-pointer"
+            onClick={handleAction}
+          >
             Confirm
           </DialogClose>
         </DialogFooter>

@@ -2,7 +2,7 @@
 
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils"; // ถ้ามี helper classnames
+import { cn } from "@/libs/utils"; // ถ้ามี helper classnames
 
 type SettingItemProps = {
   icon: React.ReactNode;

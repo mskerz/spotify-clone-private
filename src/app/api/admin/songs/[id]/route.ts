@@ -7,7 +7,7 @@ type SongParams = {
   };
 }; 
 
-//  route  : /api/admin/songs/:id ->  PUT  : Update song
+//  route  : /api/admin/dashboard/songs/:id ->  PUT  : Update song
 export async function PUT( req: Request,{  params }: SongParams) {
   try {
     const isAdmin = await adminMiddleware(req);

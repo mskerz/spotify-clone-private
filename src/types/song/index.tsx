@@ -4,7 +4,10 @@ type Song = {
     id : number;
     title: string;
     artist: string;
-    category: string;
+    category: {
+        id: number;
+        name: string
+    };
     coverImage: string;
     releaseDate: string
 }

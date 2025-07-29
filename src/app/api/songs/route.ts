@@ -16,9 +16,12 @@ export async function GET(req: Request) {
     title: song.title,
     artist: song.artist,
     releaseDate: song.releaseDate,
-    category: song.category.name,
+    category:  {
+      id: song.categoryId,
+      name: song.category.name
+    },
     coverImage: song.coverImage,
+    
   }));
   return new Response(JSON.stringify(songResponse));
 }
-

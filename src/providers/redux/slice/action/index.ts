@@ -1,12 +1,24 @@
-import { createAdminUser, deleteAdminUser, fetchAdmins, fetchDashboard, resetPasswordAdminUser } from "./admin";
+import {
+  createAdminUser,
+  deleteAdminUser,
+  fetchAdmins,
+  fetchDashboard,
+  resetPasswordAdminUser,
+} from "./src/admin";
 import {
   SignIn,
+  SignInWithGoogle,
   SignUp,
   checkUserSession,
   signOutUser,
-  SignInWithGoogle,
-} from "./auth";
-import { AddNewPlaylist,addSongToPlaylist,getPlaylist, getPlaylistById, removeSongFromPlaylist } from "./playlist";
+} from "./src/auth";
+import {
+  AddNewPlaylist,
+  addSongToPlaylist,
+  getPlaylist,
+  getPlaylistById,
+  removeSongFromPlaylist,
+} from "./src/playlist";
 
 export const authActions = {
   SignIn,
@@ -21,7 +33,7 @@ export const playlistActions = {
   getPlaylist,
   getPlaylistById,
   addSongToPlaylist,
-  removeSongFromPlaylist
+  removeSongFromPlaylist,
 };
 
 export const adminActions = {
@@ -29,5 +41,5 @@ export const adminActions = {
   fetchDashboard,
   createAdminUser,
   deleteAdminUser,
-  resetPasswordAdminUser
+  resetPasswordAdminUser,
 };

@@ -7,7 +7,7 @@ import {
   getPlaylist,
   getPlaylistById,
   removeSongFromPlaylist,
-} from "./action/playlist";
+} from "./action/src/playlist";
 
 const initState: PlaylistUserState = {
   playlistUsers: [],

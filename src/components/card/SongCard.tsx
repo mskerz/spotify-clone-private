@@ -53,7 +53,7 @@ function SongCard({ song, auth }: SongCardProps) {
         </p>
         <p className="text-sm">
           <span className="font-semibold text-[#1ed760]">Category:</span>{" "}
-          {song.category}
+          {song.category.name}
         </p>
 
         {auth.isLoggedIn && (

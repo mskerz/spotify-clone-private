@@ -1,20 +1,22 @@
+"use client";
+
 import { useRedux } from "@/hooks/redux";
-
 import { getCategory } from "@/libs/api/category";
-import { DataTable } from "./data-table";
-import { columns } from "./column";
- 
+import { useGetCategoriesQuery } from "@/libs/rtk/category";
 
-async function Page() {
-  const categories = await getCategory();
+import columns from "./column";
+import { DataTable } from "./data-table";
+
+function Page() {
+  const { data: categories } = useGetCategoriesQuery();
   return (
     <>
-    
       {/* Additional content can be added here */}
       <div className="container mx-auto py-10">
-        
-        <DataTable columns={columns} data={categories} />
-        
+        <DataTable
+          columns={columns}
+          data={categories || []}
+        />
       </div>
     </>
   );

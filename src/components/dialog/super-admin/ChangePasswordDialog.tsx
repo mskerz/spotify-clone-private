@@ -50,6 +50,7 @@ function ChangePasswordDialog({ admin }: Props) {
 
   const {
     register,
+    control ,
     handleSubmit,
     setValue,
     reset,
@@ -164,6 +165,8 @@ function ChangePasswordDialog({ admin }: Props) {
                 Update
               </Button>
             </div>
+              
+            
           </form>
         </DialogBody>
       </DialogContent>

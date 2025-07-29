@@ -11,26 +11,27 @@ import AddSongToPlaylist from "@/components/dialog/AddSongToPlaylist";
 import useAuth from "@/hooks/auth";
 import { useOpenControl } from "@/hooks/control";
 import { RootState } from "@/providers/redux/store";
+import { Song } from "@/types/song";
 
-function SongList() {
-  const { filteredSongs: songs } = useSelector(
-    (state: RootState) => state.song,
-  );
+type SongProps = {
+  songs: Song[];
+};
+function SongList({ songs }: SongProps) {
+    const { auth } = useAuth();
 
-  const AddSongControl = useOpenControl();
+  if (songs.length === 0) {
+    return (
+      <p className="text-center text-lg font-medium text-gray-400">
+        No songs available.
+      </p>
+    );
+  }
 
-  const { auth } = useAuth();
   return (
     <div className="mx-auto mt-8 flex flex-wrap gap-8 rounded-3xl p-10">
-      {songs.length === 0 ? (
-        <div className="col-span-full">
-          <p className="text-center text-lg font-medium text-gray-400">
-            No songs available.
-          </p>
-        </div>
-      ) : (
-        songs.map((song) => <SongCard song={song} auth={auth} key={song.id} />)
-      )}
+      {songs.map((song) => (
+        <SongCard auth={auth} song={song} key={song.id} />
+      ))}
     </div>
   );
 }

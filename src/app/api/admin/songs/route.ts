@@ -2,7 +2,7 @@ import prisma from "@/libs/prisma";
 import { adminMiddleware } from "@/middleware/auth";
 
 
-// route  : /api/admin/songs ->  POST  : Create song
+// route  : /api/admin/dashboard/songs ->  POST  : Create song
 export async function POST(req: Request) {
   try {
     const admin = await adminMiddleware(req);

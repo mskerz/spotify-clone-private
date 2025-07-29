@@ -1,4 +1,4 @@
-import { avartar } from "@/constant";
+import { avartar } from "@/constant/api";
 import { UserWithInfo } from "@/types/user/prisma";
 import { AuthProvider } from "@prisma/client";
 

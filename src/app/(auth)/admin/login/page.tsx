@@ -15,7 +15,7 @@ import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { ADMIN_EMAIL, ADMIN_USER_PASSWORD } from "@/constant";
+import { ADMIN_EMAIL, ADMIN_USER_PASSWORD } from "@/constant/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationFormLogin, FormLoginType } from "@/validation/login";

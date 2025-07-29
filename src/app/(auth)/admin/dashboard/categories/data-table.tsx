@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+
+import Link from "next/link";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,30 +15,19 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import Link from "next/link";
+
+import { CreateCategoryDialog } from "@/components/dialog/general-admin/category";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -55,19 +48,19 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
+          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          className="max-w-2xs"
         />
-        <Link href="/admin/song/new" className="ms-auto flex items-center gap-2 rounded-md outline-2  outline-gray-200 hover:outline-green-400 px-4 py-2 shadow transition-colors duration-200 transform  ">
-          <PlusIcon />
-          <span>New</span>
-        </Link>
+        <CreateCategoryDialog>
+          <div className="me-auto flex items-center gap-2 rounded-md outline-2  outline-gray-200 hover:outline-green-400 px-4 py-2 shadow transition-colors duration-200 transform  ">
+            <PlusIcon />
+            Add
+          </div>
+        </CreateCategoryDialog>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -77,12 +70,7 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -97,12 +85,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))

@@ -9,31 +9,19 @@ import { faker, fakerTH } from "@faker-js/faker";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components//ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components//ui/card";
 import { PasswordInput } from "@/components//ui/custom/password-input";
 import { withPublic } from "@/components/guard";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRegisterForm } from "@/hooks/forms";
 import { useRedux } from "@/hooks/redux";
 import { authActions } from "@/providers/redux/slice/action";
 import { calculateAge } from "@/utils/calculate";
-import {
-  FormRegisterType,
-  validationFormRegister,
-} from "@/validation/register";
+import { FormRegisterType, validationFormRegister } from "@/validation/register";
 
 function RegisterPage() {
   const {
@@ -46,7 +34,6 @@ function RegisterPage() {
   } = useForm<FormRegisterType>({
     resolver: zodResolver(validationFormRegister),
     mode: "onChange",
-    
   });
 
   const { dispatch } = useRedux();
@@ -81,28 +68,36 @@ function RegisterPage() {
   };
 
   const randomUserData = () => {
-
     const FirstName = faker.person.firstName();
     const LastName = faker.person.lastName();
-    setValue("firstName",  FirstName);
-    setValue("lastName",  LastName);
+    setValue("firstName", FirstName);
+    setValue("lastName", LastName);
     setValue(
       "email",
-      faker.internet.email({ firstName: FirstName,lastName: LastName, provider: "gmail.com" }).toLowerCase(),
+      faker.internet
+        .email({
+          firstName: FirstName,
+          lastName: LastName,
+          provider: "gmail.com",
+        })
+        .toLowerCase(),
     );
     setValue("password", "123456");
 
-    const birthday = faker.date.birthdate(); // สุ่มวันเกิดก่อน
+    const birthday = faker.date.birthdate({
+      min: 18,
+      max: 40,
+      mode: "age",
+    }); // สุ่มวันเกิดก่อน
 
     setValue("birthday", birthday);
     setValue("age", calculateAge(birthday));
     setValue("phoneNumber", fakerTH.phone.number({ style: "national" }));
-  }; 
-  
+  };
+
   const onError = () => {
     toast.error("Please fill in all required fields.");
   };
-
 
   return (
     <div className="flex items-center justify-center">
@@ -133,9 +128,7 @@ function RegisterPage() {
                   placeholder="Enter your password"
                   {...register("password")}
                 />
-                {errors.password && (
-                  <p className="text-red-500">{errors.password.message}</p>
-                )}
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
               </div>
               <div className="mb-4 flex w-full gap-4">
                 <div className="w-1/2">
@@ -146,9 +139,7 @@ function RegisterPage() {
                     placeholder="Enter your firstname"
                     {...register("firstName")}
                   />
-                  {errors.firstName && (
-                    <p className="text-red-500">{errors.firstName.message}</p>
-                  )}
+                  {errors.firstName && <p className="text-red-500">{errors.firstName.message}</p>}
                 </div>
                 <div className="w-1/2">
                   <Label className="mb-1 block ">Lastname</Label>
@@ -158,9 +149,7 @@ function RegisterPage() {
                     placeholder="Enter your lastname"
                     {...register("lastName")}
                   />
-                  {errors.lastName && (
-                    <p className="text-red-500">{errors.lastName.message}</p>
-                  )}
+                  {errors.lastName && <p className="text-red-500">{errors.lastName.message}</p>}
                 </div>
               </div>
               <div className="mb-4 flex w-full gap-4">
@@ -183,9 +172,7 @@ function RegisterPage() {
                     placeholder="Enter your phone number"
                     {...register("phoneNumber")}
                   />
-                  {errors.phoneNumber && (
-                    <p className="text-red-500">{errors.phoneNumber.message}</p>
-                  )}
+                  {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber.message}</p>}
                 </div>
               </div>
               <div className="mb-4 w-full">
@@ -201,9 +188,7 @@ function RegisterPage() {
                           className="w-full text-left flex items-center border p-2"
                         >
                           <span className="text-muted-foreground">
-                            {field.value
-                              ? field.value.toLocaleDateString()
-                              : "Select your birth date"}
+                            {field.value ? field.value.toLocaleDateString() : "Select your birth date"}
                           </span>
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -222,9 +207,7 @@ function RegisterPage() {
                               setValue("age", age);
                             }
                           }}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                           captionLayout="dropdown"
                         />
                       </PopoverContent>

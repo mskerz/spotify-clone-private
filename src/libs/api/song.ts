@@ -1,4 +1,4 @@
-import api from "@/lib/api";
+import api from "@/libs/axios";
 import {Playlist, Song} from "@/types/song";
 
 async function getSongs(): Promise<Song[]> {

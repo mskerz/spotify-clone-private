@@ -1,14 +1,10 @@
 import prisma from "@/libs/prisma";
 import { adminMiddleware } from "@/middleware/auth";
 
-type SongParams = {
-  params: {
-    id: string;
-  };
-}; 
+ 
 
 //  route  : /api/admin/dashboard/songs/:id ->  PUT  : Update song
-export async function PUT( req: Request,{  params }: SongParams) {
+export async function PUT( req: Request,  context: { params: Promise<{ id: string }> }) {
   try {
     const isAdmin = await adminMiddleware(req);
 
@@ -18,7 +14,7 @@ export async function PUT( req: Request,{  params }: SongParams) {
       );
     }
     const { title, artist, categoryId, releaseDate, coverImage } =  await req.json();
-    const { id } = params;
+    const { id } = await context.params;
     const updateSong = await prisma.song.update({
       where: {
         id: Number(id),
@@ -44,7 +40,7 @@ export async function PUT( req: Request,{  params }: SongParams) {
 
 
 //  route  : /api/admin/songs/:id ->  DELETE  : Delete song
-export async function DELETE(req: Request, { params }: SongParams) {
+export async function DELETE(req: Request,  context: { params: Promise<{ id: string }> }) {
     try {
         const isAdmin = await adminMiddleware(req);
 
@@ -53,7 +49,7 @@ export async function DELETE(req: Request, { params }: SongParams) {
                 JSON.stringify({ status: 401, message: "Forbidden 401" }),
             );
         }
-        const { id } =  params;
+        const { id } =  await context.params;
          await prisma.song.delete({
             where: {
                 id: Number(id),

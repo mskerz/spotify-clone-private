@@ -44,7 +44,7 @@ export async function PUT( req: Request,{  params }: SongParams) {
 
 
 //  route  : /api/admin/songs/:id ->  DELETE  : Delete song
-export async function DELELTE(req: Request, { params }: SongParams) {
+export async function DELETE(req: Request, { params }: SongParams) {
     try {
         const isAdmin = await adminMiddleware(req);
 

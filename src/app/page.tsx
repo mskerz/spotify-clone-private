@@ -1,8 +1,5 @@
-import CategoriesListButton from "@/components/button/categories";
 import { SongClient } from "@/components/data/song";
-import { SongClientWrapper } from "@/components/wrapper";
 import { getCategory } from "@/libs/api/category";
-import { useGetSongsQuery } from "@/libs/rtk/song";
 
 export default async function HomePage() {
   const categories = await getCategory();

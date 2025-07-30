@@ -6,16 +6,18 @@ import { useState } from "react";
 import Category from "@/types/category";
 
 import { Button } from "../ui/button";
+import { useGetCategoriesQuery } from "@/libs/rtk/category";
 
 type CategoriesListButtonProps = {
-  categories: Category[];
+  
   onCategoryChange: (categoryName: string | null) => void;
 };
 function CategoriesListButton({
-  categories,
+  
   onCategoryChange,
 }: CategoriesListButtonProps) {
   const [activeId, setActiveId] = useState<number | null>(null);
+  const { data: categories  } = useGetCategoriesQuery();
 
   const handleCategoryChange = (category: string | null) => {
     onCategoryChange(category);
@@ -34,7 +36,7 @@ function CategoriesListButton({
       >
         All
       </Button>
-      {categories.map((category) => (
+      {categories && categories.map((category) => (
         <Button
           key={category.id}
           className={`${

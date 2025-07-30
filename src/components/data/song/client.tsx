@@ -8,10 +8,8 @@ import Category from "@/types/category";
 
 import SongList from "./song";
 
-type SongClientProps = {
-  categories: Category[];
-};
-function SongClient({ categories }: SongClientProps) {
+
+function SongClient() {
   const { data: songs, error, isLoading } = useGetSongsQuery();
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
 
@@ -21,7 +19,7 @@ function SongClient({ categories }: SongClientProps) {
     }
     return songs;
   }, [songs, filterCategory]);
-  
+
 
   // Render
   if (isLoading) return <div>Loading...</div>;
@@ -30,7 +28,7 @@ function SongClient({ categories }: SongClientProps) {
   return (
     <>
       <CategoriesListButton
-        categories={categories}
+       
         onCategoryChange={setFilterCategory}
       />
       <SongList songs={filteredSongs!} />

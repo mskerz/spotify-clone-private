@@ -1,13 +1,13 @@
 import { auth } from "@/libs/firebase/server";
 import prisma from "@/libs/prisma";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
+// type Params = {
+//   params: {
+//     id: string;
+//   };
+// };
 
-export async function POST(request: Request, { params }: Params) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
     const { password, confirmPassword } = await request.json();

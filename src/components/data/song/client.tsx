@@ -2,18 +2,16 @@
 
 import { useMemo, useState } from "react";
 
-import { useGetSongsQuery } from "@/libs/rtk/song";
-
-import SongList from "./song";
 import CategoriesListButton from "@/components/button/categories";
+import { useGetSongsQuery } from "@/libs/rtk/song";
 import Category from "@/types/category";
 
-
+import SongList from "./song";
 
 type SongClientProps = {
-  categories: Category[]
-}
-function SongClient( { categories }: SongClientProps) {
+  categories: Category[];
+};
+function SongClient({ categories }: SongClientProps) {
   const { data: songs, error, isLoading } = useGetSongsQuery();
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
 
@@ -23,6 +21,7 @@ function SongClient( { categories }: SongClientProps) {
     }
     return songs;
   }, [songs, filterCategory]);
+  
 
   // Render
   if (isLoading) return <div>Loading...</div>;
@@ -30,7 +29,7 @@ function SongClient( { categories }: SongClientProps) {
 
   return (
     <>
-     <CategoriesListButton
+      <CategoriesListButton
         categories={categories}
         onCategoryChange={setFilterCategory}
       />

@@ -7,9 +7,9 @@ import prisma from "@/libs/prisma";
 //   };
 // };
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const { password, confirmPassword } = await request.json();
 
     if (password !== confirmPassword) {

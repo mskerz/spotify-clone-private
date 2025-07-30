@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid, List, SortAsc, SortDesc } from "lucide-react";
-import { setPlayListUsers } from "@/providers/redux/slice/playlist";
-import { withAuth } from "@/components/guard";
 import { useRedux } from "@/hooks/redux";
-import { Playlist } from "@/types/song";
 import Playlists from "@/components/data/playlist";
 import { ItemDisplay, ItemDisplayType } from "@/types/enum/display";
-import useAuth from "@/hooks/auth";
-import { playlistActions } from "@/providers/redux/slice/action";
 
  
 
@@ -18,7 +13,7 @@ enum SortType {
   DESC = "desc",
 }
 
-function PlayListPage({ userPlaylists }: { userPlaylists: Playlist[] }) {
+export default function PlayListPage() {
   const { dispatch } = useRedux();
   const [{ display }, setDisplay] = useState<ItemDisplayType>({ display: ItemDisplay.COLUMN });
   const [sort, setSort] = useState<SortType>(SortType.ASC);
@@ -60,4 +55,4 @@ function PlayListPage({ userPlaylists }: { userPlaylists: Playlist[] }) {
     </>
   );
 }
-export default PlayListPage;
+ 

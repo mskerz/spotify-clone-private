@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
 
-import { useGetSongsQuery } from "@/libs/rtk/song";
-import { filterCategorySongs, getAll } from "@/providers/redux/slice/song";
 import Category from "@/types/category";
 
 import { Button } from "../ui/button";

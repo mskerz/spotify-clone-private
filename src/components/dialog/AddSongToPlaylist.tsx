@@ -97,7 +97,7 @@ function AddSongToPlaylist({ songId, control, children }: AddSongProps) {
   };
   return (
     <Dialog open={control?.isOpen} onOpenChange={control?.setIsOpen}>
-      <DialogTrigger>{children || "Add"}</DialogTrigger>
+      <DialogTrigger asChild>{children || "Add"}</DialogTrigger>
 
       <DialogContent showCloseButton={false}>
         <DialogHeader className="flex flex-row items-center justify-between">

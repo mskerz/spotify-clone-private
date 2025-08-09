@@ -13,6 +13,7 @@ import api from "@/libs/axios";
 import { auth, googleProvider } from "@/libs/firebase/client";
 import { FormLoginType, FormRegisterType } from "@/types/form";
 import { User } from "@/types/user";
+import axios from "axios";
 
 export const SignUp = createAsyncThunk<void, FormRegisterType, { rejectValue: string }>(
   "auth/signup",
@@ -52,7 +53,10 @@ export const SignIn = createAsyncThunk<User, FormLoginType, { rejectValue: strin
 
       return res.data.user;
     } catch (error) {
-      return rejectWithValue("Invalid email or password");
+        if(axios.isAxiosError(error)){
+            return rejectWithValue(error.response?.data.message);
+        }
+     
     }
   },
 );

@@ -7,6 +7,7 @@ import { useGetSongsQuery } from "@/libs/rtk/song";
 import Category from "@/types/category";
 
 import SongList from "./song";
+import SongLoading from "@/components/skeleton/song";
 
 
 function SongClient() {
@@ -21,8 +22,8 @@ function SongClient() {
   }, [songs, filterCategory]);
 
 
-  // Render
-  if (isLoading) return <div>Loading...</div>;
+  // Render 
+  if (isLoading) return <SongLoading />;
   if (error) return <div>Error loading songs</div>;
 
   return (

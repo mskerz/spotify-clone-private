@@ -27,10 +27,14 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response,
   (error ) => {
-   if (error.response?.data?.message) {
-      return Promise.reject(new Error(error.response.data.message));
+    const err = error as AxiosError<{ message: string }>;
+    
+     // ตัวอย่าง: log message หรือทำการแจ้งเตือน
+    if (err.response?.data?.message) {
+      console.error("API Error:", err.response.data.message);
     }
-    return Promise.reject(error);
+
+    return Promise.reject(err);
   }
 );
 

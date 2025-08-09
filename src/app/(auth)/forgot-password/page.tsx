@@ -4,13 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { withPublic } from "@/components/guard";
+import { useRedux } from "@/hooks/redux";
+import { authActions } from "@/providers/redux/slice/action";
 
 // page.tsx
  function  ForgotPasswordPage() {
   const [forgotEmail, setForgotEmail] = useState("");
+  const  { dispatch } = useRedux();
   const onResetPassword = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(authActions.forgotPassword(forgotEmail));
+
   };
+
+
+ 
   return (
     <Card className="w-full max-w-md ">
       <CardHeader>

@@ -1,17 +1,5 @@
-import {
-  createAdminUser,
-  deleteAdminUser,
-  fetchAdmins,
-  fetchDashboard,
-  resetPasswordAdminUser,
-} from "./src/admin";
-import {
-  SignIn,
-  SignInWithGoogle,
-  SignUp,
-  checkUserSession,
-  signOutUser,
-} from "./src/auth";
+import { createAdminUser, deleteAdminUser, fetchAdmins, fetchDashboard, resetPasswordAdminUser } from "./src/admin";
+import { SignIn, SignInWithGoogle, SignUp, checkUserSession, forgotPassword, signOutUser } from "./src/auth";
 import {
   AddNewPlaylist,
   addSongToPlaylist,
@@ -26,6 +14,7 @@ export const authActions = {
   checkUserSession,
   signOutUser,
   SignInWithGoogle,
+  forgotPassword,
 };
 
 export const playlistActions = {

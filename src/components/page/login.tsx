@@ -1,13 +1,18 @@
 "use client";
 
-import { useRedux } from "@/hooks/redux";
-import { authActions } from "@/providers/redux/slice/action";
-import { GoogleOriginal as Google } from "devicons-react";
+import { useState } from "react";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GoogleOriginal as Google } from "devicons-react";
+
 import { Divider } from "@/components/common";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import {
   Card,
   CardAction,
@@ -19,14 +24,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { withPublic } from "../guard";
+import { useRedux } from "@/hooks/redux";
+import { authActions } from "@/providers/redux/slice/action";
 import { setRedirectAfterLogin } from "@/providers/redux/slice/redirect";
-import { useState } from "react";
-import { PasswordInput } from "../ui/custom/password-input";
+import { FormLoginType, validationFormLogin } from "@/validation/login";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { validationFormLogin, FormLoginType } from "@/validation/login";
+import { withPublic } from "../guard";
+import { PasswordInput } from "../ui/custom/password-input";
 
 function LoginPage() {
   const {
@@ -41,7 +45,6 @@ function LoginPage() {
     defaultValues: {
       email: "test2@gmail.com",
       password: "123456",
-      
     },
   });
   const { dispatch, useSelector } = useRedux();
@@ -51,8 +54,7 @@ function LoginPage() {
   const handleGoogleLogin = () => {
     dispatch(authActions.SignInWithGoogle());
   };
-  const onSubmit =  (data: FormLoginType) => {
-
+  const onSubmit = (data: FormLoginType) => {
     if (!data.email || !data.password) {
       toast("Please fill in all required fields.", {
         icon: "⚠️",
@@ -83,9 +85,7 @@ function LoginPage() {
   return (
     <Card className="my-4 flex w-full max-w-md rounded-xl p-8">
       <CardHeader className="flex flex-col items-center">
-        <CardTitle className="mt-4 text-left text-2xl font-semibold">
-          Sign in to your account
-        </CardTitle>
+        <CardTitle className="mt-4 text-left text-2xl font-semibold">Sign in to your account</CardTitle>
         <CardDescription className="mt-2 text-sm text-gray-400">
           Enter your email below to login to your account
         </CardDescription>
@@ -110,27 +110,30 @@ function LoginPage() {
             <Label className="mb-3 block">Email address</Label>
             <Input
               type="email"
-
               className="w-full rounded-md p-2"
               placeholder="Enter your email"
               {...register("email")}
             />
-            {errors.email && (
-              <span className="text-red-500 text-sm">{errors.email.message}</span>
-            )}
+            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
           </div>
           <div className="my-4 w-full">
             <Label className="mb-3 block">Password</Label>
             <PasswordInput
-            
               className="w-full rounded-md p-2"
               placeholder="Enter your password"
               {...register("password")}
             />
-            {errors.password && (
-              <span className="text-red-500 text-sm">{errors.password.message}</span>
-            )}
+            {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
           </div>
+        <div className="w-full">
+            <Link
+            className="text-[14px] text-secondary-foreground text-right hover:underline"
+            href="/forgot-password"
+          >
+            Forgot your password?
+          </Link>
+        </div>
+
           <Button
             type="submit"
             className="mt-2 w-full cursor-pointer rounded-4xl bg-[#1ed760] px-4 py-2 text-white shadow transition hover:bg-[#1fdf64]"

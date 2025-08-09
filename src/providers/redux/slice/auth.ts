@@ -6,6 +6,7 @@ import {
   checkUserSession,
   signOutUser,
   SignInWithGoogle,
+  forgotPassword
 } from "./action/src/auth";
 import { User } from "@/types/user";
 
@@ -117,7 +118,17 @@ const authSlice = createSlice({
           state.status = "failed";
           state.error = action.payload ?? "Login failed";
         },
-      );
+      )
+      .addCase(forgotPassword.pending, (state) => {
+          state.loading = true;
+
+      })
+      .addCase(forgotPassword.fulfilled, (state) => {
+         state.loading = false;
+      })
+      .addCase(forgotPassword.rejected, (state) => {
+          state.loading = false;
+      });
   },
 });
 

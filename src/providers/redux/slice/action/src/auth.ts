@@ -56,6 +56,8 @@ export const SignIn = createAsyncThunk<User, FormLoginType, { rejectValue: strin
         if(axios.isAxiosError(error)){
             return rejectWithValue(error.response?.data.message);
         }
+
+        return rejectWithValue("Something went wrong");
      
     }
   },

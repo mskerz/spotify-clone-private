@@ -42,6 +42,10 @@
   --color-canvas: var(--canvas);
   --color-canvas-content: var(--canvas-content);
   --color-canvas-foreground: var(--canvas-foreground);
+  --color-play-button-background: var(--play-button-background);
+  --color-play-button-foreground: var(--play-button-foreground);
+  --color-progress-root: var(--progress-root);
+  --color-progress-indicator: var(--progress-indicator);
 }
 
 :root {
@@ -84,6 +88,11 @@
   --avatar-hover-glow: 0 0 8px 4px rgba(34, 197, 94, 0.5);
   --button-color: #1ed760;
   --button-hover-color: #1ac75c;
+
+  --play-button-background: #000;
+  --play-button-foreground: #fff;
+  --progress-root: oklch(82.656% 0.00009 271.152);
+  --progress-indicator: oklch(32.109% 0.00004 271.152);
 }
 
 .dark {
@@ -120,6 +129,14 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
   --avatar-hover-glow: 0 0 8px 4px rgba(46, 122, 236, 0.5);
+  --button-color: #1ed760;
+  --button-hover-color: #1ac75c;
+
+  --play-button-background: #fff;
+  --play-button-foreground: #000;
+
+  --progress-root: oklch(52.78% 0.00006 271.152);
+  --progress-indicator: oklch(100% 0.00011 271.152);
 }
 
 @layer base {
@@ -131,12 +148,9 @@
   }
 }
 
- 
-
 body .font-local {
   font-family: "Noto Sans Thai", sans-serif !important;
 }
-
 
 /* ปกติไม่แสดง */
 .avatar-outline {
@@ -167,3 +181,7 @@ body .font-local {
   background-color: var(--button-hover-color);
 }
 
+.button-player {
+  background-color: var(--play-button-background);
+  color: var(--play-button-foreground);
+}

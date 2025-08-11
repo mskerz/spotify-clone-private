@@ -1,4 +1,5 @@
 import { SongClient } from "@/components/data/song";
+import {MusicPlayerControls} from "@/components/music-player";
 
 export default function HomePage() {
   // ssr fetch
@@ -8,6 +9,7 @@ export default function HomePage() {
         {/* ฟอร์มเพิ่มเพลง */}
 
         <SongClient />
+
       </div>
     </>
   );

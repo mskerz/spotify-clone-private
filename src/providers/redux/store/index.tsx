@@ -9,12 +9,15 @@ import adminReducer from "../slice/admin";
 import authReducer from "../slice/auth";
 import playlistReducer from "../slice/playlist";
 import redirectReducer from "../slice/redirect";
+import musicPlayerReducer from "../slice/music-player";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     redirect: redirectReducer,
     playlist: playlistReducer,
+    musicPlayer: musicPlayerReducer,
+    
     admin: adminReducer, // Ensure to import and add the admin reducer
     [songApi.reducerPath]: songApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,

@@ -1,18 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { ChildrenProps } from "@/types/props";
-import ReduxProvider from "./ReduxProvider";
-import { Toaster } from "react-hot-toast";
-import Navbar from "../Navbar";
-import ThemeProvider from "./ThemeProvider";
-import AuthSessionProvider from "./AuthSessionProvider";
+import { useEffect, useState } from "react";
 
+import { usePathname } from "next/navigation";
+
+import { Toaster } from "react-hot-toast";
+
+import { MusicPlayerControls } from "@/components/music-player";
 // เพิ่มจาก Shadcn UI
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { ChildrenProps } from "@/types/props";
+
 import { AppSidebar } from "../AppSidebar";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import Navbar from "../Navbar";
+import AuthSessionProvider from "./AuthSessionProvider";
+import ReduxProvider from "./ReduxProvider";
+import ThemeProvider from "./ThemeProvider";
 
 function AppLayout({ children }: ChildrenProps) {
   const [showNavigation, setShowNavigation] = useState(false);
@@ -22,7 +26,11 @@ function AppLayout({ children }: ChildrenProps) {
     setShowNavigation(!isAuthPage);
   }, [pathName]);
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+    >
       <ReduxProvider>
         <AuthSessionProvider>
           <Toaster position="bottom-center" />
@@ -34,6 +42,9 @@ function AppLayout({ children }: ChildrenProps) {
                 {children}
               </div>
             </main>
+            <footer>
+              <MusicPlayerControls />
+            </footer>
           </SidebarProvider>
         </AuthSessionProvider>
       </ReduxProvider>

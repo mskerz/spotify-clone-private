@@ -2,6 +2,9 @@ import prisma from "@/libs/prisma";
 
 export async function GET(req: Request) {
   const songs = await prisma.song.findMany({
+    orderBy: {
+      id: "asc",
+    },
     include: {
       category: {
         select: {

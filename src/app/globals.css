@@ -131,16 +131,7 @@
   }
 }
 
-@font-face {
-  @font-face {
-    font-family: "Local Font";
-    src: url("/fonts/NotoSansThai.ttf") format("truetype");
-    font-weight: 200;
-    font-style: normal;
-    unicode-range: U+0E00-0E7F; /* ถ้าอยากจำกัดแค่ภาษาไทย */
-  }
-}
-
+ 
 
 body .font-local {
   font-family: "Noto Sans Thai", sans-serif !important;
@@ -175,3 +166,4 @@ body .font-local {
 .button-spotify:hover {
   background-color: var(--button-hover-color);
 }
+

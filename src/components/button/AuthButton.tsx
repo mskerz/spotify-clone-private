@@ -26,7 +26,7 @@ function AuthButton() {
 
           <Link
             href="/admin/login"
-            className="text-accent-foreground hover:bg-accent hover:text-accent-foreground rounded-3xl px-2 py-2 font-medium transition-all"
+            className=" hidden md:inline-block text-accent-foreground hover:bg-accent hover:text-accent-foreground rounded-3xl px-2 py-2 font-medium transition-all"
           >
             Admin Login
           </Link>

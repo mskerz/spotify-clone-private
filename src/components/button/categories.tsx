@@ -2,16 +2,17 @@
 
 import { useState } from "react";
 
-import { useGetCategoriesQuery } from "@/libs/rtk/category";
+import { useGetCategoriesQuery, useGetMostCategoriesQuery } from "@/libs/rtk/category";
 
 import { Button } from  "@/components/ui/button";
+import { useGetSongsQuery } from "@/libs/rtk/song";
 
 type CategoriesListButtonProps = {
   onCategoryChange: (categoryName: string | null) => void;
 };
 function CategoriesListButton({ onCategoryChange }: CategoriesListButtonProps) {
   const [activeId, setActiveId] = useState<number | null>(null);
-  const { data: categories } = useGetCategoriesQuery();
+  const { data: categories } = useGetMostCategoriesQuery(); 
 
   const handleCategoryChange = (category: string | null) => {
     onCategoryChange(category);

@@ -18,6 +18,14 @@ export const categoryApi = createApi({
       providesTags: ["Category"],
     }),
 
+    getMostCategories: builder.query<Category[], void>({
+      query: () => ({
+        url: "/categories/most",
+        method: "GET",
+      }),
+      providesTags: ["Category"],
+    }),
+
     createNewCategory: builder.mutation<Category, Partial<CategoryFormType>>({
       query: (category) => ({
         url: ADMIN_API.CATEGORIES,
@@ -46,6 +54,7 @@ export const categoryApi = createApi({
 
 export const {
   useGetCategoriesQuery,
+  useGetMostCategoriesQuery,
   useCreateNewCategoryMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,

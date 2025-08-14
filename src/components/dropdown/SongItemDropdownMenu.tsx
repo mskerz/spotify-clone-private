@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useAuth from "@/hooks/auth";
 import { useOpenControl } from "@/hooks/control";
 import { Song } from "@/types/song";
 
@@ -16,6 +17,7 @@ import ShareSongDialog from "../dialog/ShareSongDialog";
 import { Button } from "../ui/button";
 
 function SongItemDropdownMenu({ song }: { song: Song }) {
+  const { isLoggedIn } = useAuth().auth;
   const control = useOpenControl();
   return (
     <DropdownMenu modal={false}>
@@ -28,17 +30,19 @@ function SongItemDropdownMenu({ song }: { song: Song }) {
         className="w-56"
         align="start"
       >
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <AddSongToPlaylist
-            songId={song.id}
-            control={control}
-          >
-            <div className="flex items-center cursor-pointer">
-              <CirclePlusIcon size={20} />
-              <span className="ml-2">Add to your collection</span>
-            </div>
-          </AddSongToPlaylist>
-        </DropdownMenuItem>
+        {isLoggedIn && (
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <AddSongToPlaylist
+              songId={song.id}
+              control={control}
+            >
+              <div className="flex items-center cursor-pointer">
+                <CirclePlusIcon size={20} />
+                <span className="ml-2">Add to your collection</span>
+              </div>
+            </AddSongToPlaylist>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem>
           <ShareSongDialog song={song}>
             <div className="flex items-center cursor-pointer">

@@ -2,7 +2,12 @@
 import prisma from "@/libs/prisma";
 import redis from "@/libs/redis";
 import { mapSongs } from "@/utils/map/song";
-export async function GET(context: { params: Promise<{ name: string }> }) {
+ 
+
+interface CategoryContext {
+      params:  Promise<{ name: string }>
+}
+export async function GET( request: Request,  context: CategoryContext)  {
     try {
 
         const { name } = await context.params;

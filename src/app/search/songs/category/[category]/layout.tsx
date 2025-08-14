@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 
+import { Separator } from "@/components/ui/separator";
 import { ChildrenProps } from "@/types/props";
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
@@ -12,7 +13,25 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   };
 }
 
-function SearchSongsWithCategoryLayout({ children }: ChildrenProps) {
-  return <div className="container flex min-h-screen flex-col items-center sm:mx-auto px-4 md:px-0"> {children} </div>;
+export default async function SearchSongsWithCategoryLayout(
+  { params, children }: { params: Promise<{ category: string }>, children: React.ReactNode }
+) {
+  const { category } = await params; // ✅ ต้อง await ก่อน
+  const decodedCategory = decodeURIComponent(category);
+
+  return (
+    <div className="min-h-screen">
+      {/* Header เต็มจอ */}
+      <header className="w-full flex flex-col justify-end h-40 py-5 bg-gradient-to-br from-blue-500 to-gray-800">
+        <h1 className="text-4xl font-bold px-5 text-white">{ decodedCategory }</h1>
+      </header>
+
+      <Separator />
+
+      {/* เนื้อหาหลักใช้ container */}
+      <main className="container my-5">
+        {children}
+      </main>
+    </div>
+  );
 }
-export default SearchSongsWithCategoryLayout;

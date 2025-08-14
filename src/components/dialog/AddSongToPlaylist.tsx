@@ -13,6 +13,7 @@ import {
   DialogBody,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -99,11 +100,16 @@ function AddSongToPlaylist({ songId, control, children }: AddSongProps) {
     <Dialog open={control?.isOpen} onOpenChange={control?.setIsOpen}>
       <DialogTrigger asChild>{children || "Add"}</DialogTrigger>
 
-      <DialogContent showCloseButton={false}>
+      <DialogContent showCloseButton={false} onEscapeKeyDown={control?.close}>
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogCancel />
-          <DialogTitle>Add to Playlist</DialogTitle>
-          <div aria-hidden="true" />
+          
+          <div className="flex flex-col space-y-1.5">
+            <DialogTitle>Add to Playlist</DialogTitle>
+            <DialogDescription>
+              Add this song to your playlist
+            </DialogDescription>
+          </div>
+           <DialogCancel />
         </DialogHeader>
         <DialogBody>
           {}

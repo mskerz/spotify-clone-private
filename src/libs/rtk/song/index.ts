@@ -20,6 +20,22 @@ export const songApi = createApi({
       }),
       providesTags: ["Song"],
     }),
+
+    getSongsWithCategory: builder.query<Song[], {name: string}>({
+      query: ( {name}) => ({
+         url:`/songs/categories/${name}`,
+        method: "GET",
+      }),
+       providesTags: ["Song"],
+    }),
+
+    getDetailSong: builder.query<Song, number>({
+      query: (id) => ({
+        url: `/songs/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Song"],
+    }),
     createSong: builder.mutation<Song, Partial<FormSongType>>({
       query: (song) => ({
         url: ADMIN_API.SONGS,
@@ -49,5 +65,5 @@ export const songApi = createApi({
   }),
 });
 
-export const { useGetSongsQuery, useCreateSongMutation, useUpdateSongMutation, useDeleteSongMutation } = songApi;
+export const { useGetSongsQuery , useGetSongsWithCategoryQuery,useGetDetailSongQuery, useCreateSongMutation, useUpdateSongMutation, useDeleteSongMutation } = songApi;
 // CRUD : Create, Read, Update, Delete

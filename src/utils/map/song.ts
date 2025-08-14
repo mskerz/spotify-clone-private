@@ -27,4 +27,18 @@ function mapSongs(songs: SonWithCategory[]) {
   }));
 }
 
-export { mapSongs };
+function mapSong(song: SonWithCategory) {
+  return {
+    id: song.id,
+    title: song.title,
+    artist: song.artist,
+    releaseDate: song.releaseDate,
+    category: {
+      id: song.categoryId,
+      name: song.category.name,
+    },
+    coverImage: song.coverImage,
+  };
+}
+
+export { mapSongs , mapSong };

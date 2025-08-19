@@ -18,8 +18,8 @@ A full-stack music streaming web application, similar to Spotify, with user auth
 🎨 **UI / Styling:** TailwindCSS, Shadcn UI, Lucide, Devicon  
 ⚡ **State Management / API:** Redux Toolkit, Axios
 
-**Architecture:**  
-The application uses a layered architecture:
+**Overview of the System:**  
+ 
 ```
 flowchart TB
     subgraph Frontend

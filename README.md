@@ -1,17 +1,48 @@
 # 🎧 Spotify Clone
 
-A full-stack music streaming web application inspired by Spotify.  
-This project features user authentication, playlist management, and audio playback with a clean and responsive UI.
+**Project Type:**  
+A full-stack music streaming web application, similar to Spotify, with user authentication, playlist management, and audio playback.
 
-## 🚀 Tech Stack
+**Key Features:**
+- User Authentication (email/password, Google)
+- Browse and search songs
+- Create and manage playlists
+- Basic audio playback (fake)
+- Admin dashboard for managing songs and categories
 
-- **Frontend**: [Next.js](https://nextjs.org/), [TailwindCSS](https://tailwindcss.com/), [Shadcn UI](https://ui.shadcn.com/)
-- **Backend**: [Prisma](https://www.prisma.io/) ORM, [PostgreSQL](https://www.postgresql.org/) (via Docker Compose)
-- **Authentication**: [Firebase Authentication](https://firebase.google.com/docs/auth) with **email/password** and **Google** sign-in providers
-- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
-- **Icons**: [Lucide](https://lucide.dev/), [Devicon](https://devicon.dev/), [React Icons](https://react-icons.github.io/react-icons)
 
- 
+**Tech Stack:**  
+💻 **Frontend:** Next.js, TypeScript, React Icons  
+🗄️ **Backend / Database:** PostgreSQL, Prisma, Redis  
+🔒 **Authentication:** Firebase Auth (Email/Password, Google)  
+🎨 **UI / Styling:** TailwindCSS, Shadcn UI, Lucide, Devicon  
+⚡ **State Management / API:** Redux Toolkit, Axios
+
+**Architecture:**  
+The application uses a layered architecture:
+```
+flowchart TB
+    subgraph Frontend
+        A[Next.js UI] -->|Uses| B[Shadcn UI & TailwindCSS]
+        A -->|State Management| C[Redux Toolkit]
+        A -->|HTTP Requests| D[Axios]
+    end
+
+    subgraph Backend
+        E[Next.js API Routes] -->|Query DB| F[Prisma ORM]
+        F --> G[PostgreSQL Database]
+        E -->|Cache| H[Redis]
+        E -->|Auth| I[Firebase Authentication]
+    end
+
+    Frontend -->|Send Request| Backend
+
+    style Frontend fill:#f9f,stroke:#333,stroke-width:2px
+    style Backend fill:#bbf,stroke:#333,stroke-width:2px
+
+```
+
+
 
 ## 🐳 Docker Setup
 
